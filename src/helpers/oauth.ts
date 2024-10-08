@@ -8,6 +8,7 @@ const client_secret = "secret";
 const code_challenge_method = "S256";
 let authServer: oauth.AuthorizationServer;
 const state = "{}";
+const baseUrl = new URL((document.querySelector("base").href || "/") );
 
 export const authenticate = async () => {
   const currentUrl = new URL(window.location.href);
@@ -23,9 +24,9 @@ export const authenticate = async () => {
   }
   
   const client: oauth.Client = {client_id};
-  const redirect_uri = (document.querySelector("base").href || "/") + "oauth/callback"
+  const redirect_uri = baseUrl + "oauth/callback"
   
-  if (currentUrl.pathname === "/oauth/callback") {
+  if (currentUrl.pathname === baseUrl.pathname + "oauth/callback") {
     const params = oauth.validateAuthResponse(authServer, client, currentUrl, state)
     let clientAuth = oauth.ClientSecretPost(client_secret);
     const code_verifier = sessionStorage.getItem("code_verifier");
@@ -47,14 +48,14 @@ export const authenticate = async () => {
     history.replaceState(null, "", "/");
     
   } 
-  else if (currentUrl.pathname === "/oauth/logout") {
+  else if (currentUrl.pathname === baseUrl.pathname + "oauth/logout") {
     const token = JSON.parse(sessionStorage.getItem("token")!);
     const endSessionUrl = new URL(authServer.end_session_endpoint);
     sessionStorage.removeItem("token");
     const params = encodedStringFromObject(
         {
           id_token_hint: token.id_token,
-          post_logout_redirect_uri: document.querySelector("base").href || "/",
+          post_logout_redirect_uri: baseUrl.toString(),
         },
         encodeURIComponent,
         "&",
