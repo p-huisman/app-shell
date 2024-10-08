@@ -32,11 +32,14 @@ function loadAppShell(config: any) {
 }
 
 function initSingleSpa(config: any) {
+  const base = document.querySelector("base").href;
+  const url = new URL(base);
+  const pathName = url.pathname
   let appTemp =
     '<route default><application name="@app-shell-app/index"></application></route>';
 
   config.apps.forEach((app: any) => {
-    appTemp += `<route path="${app.href}"><application name="${app.name}"></application></route>`;
+    appTemp += `<route path="${pathName}${app.href}"><application name="${app.name}"></application></route>`;
   });
 
   const template =

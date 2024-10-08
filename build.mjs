@@ -83,7 +83,7 @@ export async function startServer() {
   app.use(express.static("./dist"), serveIndex("./dist", { icons: true }));
 
   app.get("*", function (req, res) {
-    res.status(404).sendFile(path.join(projectRootDir, "github-pages/404.html"));
+    res.status(404).sendFile(path.join(projectRootDir, "404.html"));
   });
 
   return new Promise((resolve) => {
