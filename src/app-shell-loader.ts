@@ -60,6 +60,7 @@ function initSingleSpa(config: any) {
     app.customProps = {foo: "bar"};
   });
   applications.forEach(registerApplication);
+  console.log({routes, applications})
   layoutEngine.activate();
 
   start();

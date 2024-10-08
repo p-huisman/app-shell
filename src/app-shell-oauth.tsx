@@ -5,7 +5,7 @@ import {authenticate} from "./helpers/oauth";
 
 const OAuth = () => {
   authenticate();
-
+  console.log("OAuth");
   return (
     <div id="oauth">
       Even geduld a.u.b. ...

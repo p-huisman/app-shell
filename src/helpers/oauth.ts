@@ -6,9 +6,10 @@ const client_secret = "secret";
 const code_challenge_method = "S256";
 let authServer: oauth.AuthorizationServer;
 const state = "{}";
-const baseUrl = new URL(document.querySelector("base").href || "/");
 
 export const authenticate = async () => {
+  const baseUrl = new URL(document.querySelector("base").href || "/");
+
   const currentUrl = new URL(window.location.href);
   if (!authServer) {
     authServer = await oauth
@@ -50,6 +51,7 @@ export const authenticate = async () => {
     }
     history.replaceState(null, "", baseUrl.toString());
   } else if (currentUrl.pathname === baseUrl.pathname + "oauth/logout") {
+    // end session
     const token = JSON.parse(sessionStorage.getItem("token")!);
     const endSessionUrl = new URL(authServer.end_session_endpoint);
     sessionStorage.removeItem("token");
@@ -64,6 +66,7 @@ export const authenticate = async () => {
 
     document.location.href = endSessionUrl.toString() + "?" + params;
   } else {
+    // authorize
     const code_verifier = oauth.generateRandomCodeVerifier();
     sessionStorage.setItem("code_verifier", code_verifier);
     const code_challenge =
