@@ -32,7 +32,7 @@ function loadAppShell(config: any) {
 }
 
 function initSingleSpa(config: any) {
-  const base = document.querySelector("base").href;
+  const base = document.querySelector("base").href || "/";
   const url = new URL(base);
   const pathName = url.pathname;
   let appTemp = `

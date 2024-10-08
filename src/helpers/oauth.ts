@@ -23,7 +23,7 @@ export const authenticate = async () => {
   }
   
   const client: oauth.Client = {client_id};
-  const redirect_uri = document.querySelector("base")?.href + "oauth/callback"
+  const redirect_uri = (document.querySelector("base").href || "/") + "oauth/callback"
   
   if (currentUrl.pathname === "/oauth/callback") {
     const params = oauth.validateAuthResponse(authServer, client, currentUrl, state)
@@ -54,7 +54,7 @@ export const authenticate = async () => {
     const params = encodedStringFromObject(
         {
           id_token_hint: token.id_token,
-          post_logout_redirect_uri: document.querySelector("base").href
+          post_logout_redirect_uri: document.querySelector("base").href || "/",
         },
         encodeURIComponent,
         "&",
