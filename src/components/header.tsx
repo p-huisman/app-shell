@@ -1,4 +1,4 @@
-import {makeStyles, MenuGroupHeader} from "@fluentui/react-components";
+import {makeStyles, MenuGroup, MenuGroupHeader} from "@fluentui/react-components";
 import React, {useEffect, useState} from "react";
 import {
   Avatar,
@@ -54,7 +54,9 @@ export const AppShellHeader = () => {
         <MenuPopover>
           <MenuList>
             {userName !== "" ? (
-              <MenuGroupHeader>{userName}</MenuGroupHeader>
+              <MenuGroup>
+              <MenuGroupHeader><strong>{userName}</strong></MenuGroupHeader>
+              </MenuGroup>
             ) : null }
             {userName === "" ? (
               <MenuItem
