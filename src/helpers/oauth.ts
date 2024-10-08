@@ -16,11 +16,11 @@ export const authenticate = async () => {
       .discoveryRequest(issuer)
       .then((response) => oauth.processDiscoveryResponse(issuer, response));
   }
-  const token = localStorage.getItem("token");
-  if (token && currentUrl.pathname !== "/oauth/logout") {
-    history.replaceState(null, "", "/");
-    return;
-  }
+//   const token = localStorage.getItem("token");
+//   if (token && currentUrl.pathname !== "/oauth/logout") {
+//     history.replaceState(null, "", "/");
+//     return;
+//   }
 
   const client: oauth.Client = {client_id};
   const redirect_uri = baseUrl + "oauth/callback";
