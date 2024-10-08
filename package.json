@@ -37,6 +37,7 @@
     "@fluentui/react-icons": "^2.0.260",
     "@fluentui/react-nav-preview": "^0.8.1",
     "@fluentui/svg-icons": "^1.1.260",
+    "oauth4webapi": "^3.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "single-spa": "^6.0.3",

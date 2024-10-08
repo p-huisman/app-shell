@@ -123,7 +123,7 @@ function broadcast(data) {
 }
 
 const appShellBuildOptions = {
-  entryPoints: ["./src/app-shell.tsx", "./src/app-shell-dashboard.tsx"],
+  entryPoints: ["./src/app-shell.tsx", "./src/app-shell-oauth.tsx", "./src/app-shell-dashboard.tsx"],
   outdir: "dist",
   bundle: true,
   platform: "browser",

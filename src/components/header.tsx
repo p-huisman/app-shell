@@ -12,7 +12,8 @@ export const AppShellHeader = () => {
   const styles = useStyles();
   return (
     <header id="Header" className={styles.header}>
-      
+        <button onClick={() => history.pushState({}, "", "/oauth")}>Login</button>
+        <button onClick={() => history.pushState({}, "", "/oauth/logout")}>Logout</button>
     </header>
   );
 };

@@ -1,4 +1,4 @@
-import { registerApplication, start } from "single-spa";
+import {registerApplication, start} from "single-spa";
 import {
   constructApplications,
   constructRoutes,
@@ -34,9 +34,10 @@ function loadAppShell(config: any) {
 function initSingleSpa(config: any) {
   const base = document.querySelector("base").href;
   const url = new URL(base);
-  const pathName = url.pathname
-  let appTemp =
-    '<route default><application name="@app-shell-app/index"></application></route>';
+  const pathName = url.pathname;
+  let appTemp = `
+    <route default><application name="@app-shell-app/index"></application></route>
+    <route path="${pathName}oauth"><application name="@app-shell-app/oauth"></application></route>`;
 
   config.apps.forEach((app: any) => {
     appTemp += `<route path="${pathName}${app.href}"><application name="${app.name}"></application></route>`;
@@ -48,15 +49,15 @@ function initSingleSpa(config: any) {
 
   const applications = constructApplications({
     routes,
-    loadApp({ name }) {
+    loadApp({name}) {
       return import(name);
     },
   });
 
-  const layoutEngine = constructLayoutEngine({ routes, applications });
+  const layoutEngine = constructLayoutEngine({routes, applications});
 
   applications.forEach((app) => {
-    app.customProps = { foo: "bar" };
+    app.customProps = {foo: "bar"};
   });
   applications.forEach(registerApplication);
   layoutEngine.activate();
@@ -78,14 +79,12 @@ async function main() {
   window.addEventListener(
     "appShellReady",
     () => {
-      window.dispatchEvent(
-        new CustomEvent("initApps", { detail: config.apps })
-      );
+      window.dispatchEvent(new CustomEvent("initApps", {detail: config.apps}));
       requestAnimationFrame(() => {
         initSingleSpa(config);
       });
     },
-    { once: true }
+    {once: true},
   );
 
   createImportMap(config);
