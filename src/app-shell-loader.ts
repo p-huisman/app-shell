@@ -6,7 +6,7 @@ import {
 } from "single-spa-layout";
 
 async function loadAppShellConfig() {
-  return await fetch("/app-shell.json")
+  return await fetch("./app-shell.json")
     .then((response) => response.json())
     .catch((e) => e);
 }
@@ -38,7 +38,7 @@ function initSingleSpa(config: any) {
   config.apps.forEach((app: any) => {
     appTemp += `<route path="${app.href}"><application name="${app.name}"></application></route>`;
   });
-  
+
   const template =
     `<single-spa-router containerEl="#Content">${appTemp}</single-spa-router>` as string;
   const routes = constructRoutes(template);

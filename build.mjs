@@ -3,6 +3,7 @@ import { WebSocketServer } from "ws";
 import serveIndex from "serve-index";
 import http from "http";
 import path from "path";
+import  fs from "fs"; 
 import { networkInterfaces } from "os";
 import esbuild from "esbuild";
 import { copy } from "esbuild-plugin-copy";
@@ -82,7 +83,7 @@ export async function startServer() {
   app.use(express.static("./dist"), serveIndex("./dist", { icons: true }));
 
   app.get("*", function (req, res) {
-    res.status(404).sendFile(path.join(projectRootDir, "404.html"));
+    res.status(404).sendFile(path.join(projectRootDir, "github-pages/404.html"));
   });
 
   return new Promise((resolve) => {
@@ -136,6 +137,8 @@ const appShellBuildOptions = {
   allowOverwrite: true,
 };
 
+const from =  ["./src/index.html", "./src/app-shell.json"];
+
 const appShellLoaderBuildOptions = {
   entryPoints: ["./src/app-shell-loader.ts"],
   outdir: "dist",
@@ -145,12 +148,12 @@ const appShellLoaderBuildOptions = {
   target: "es2022",
   plugins: [
     copy({
-      resolveFrom: "cwd",
+      resolveFrom: projectRootDir,
       assets: {
-        from: ["./src/index.html", "./src/app-shell.json"],
+        from,
         to: ["./dist"],
       },
-      watch: true,
+      watch: env !== "production",
     }),
     buildPlugin,
   ],
@@ -177,6 +180,16 @@ async function main() {
 
   await esbuild.build(appShellBuildOptions);
   await esbuild.build(appShellLoaderBuildOptions);
+  if (env === "production") {
+    fs.copyFileSync(
+      path.join(projectRootDir, "github-pages/index.html"),
+      path.join(projectRootDir, "dist/index.html")
+    );
+    fs.copyFileSync(
+      path.join(projectRootDir, "github-pages/404.html"),
+      path.join(projectRootDir, "dist/404.html")
+    );
+  }
 }
 
 main().catch((e) => {
