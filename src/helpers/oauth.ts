@@ -1,14 +1,12 @@
 import * as oauth from "oauth4webapi";
 
-// Prerequisites
-
 const issuer = new URL("https://demo.duendesoftware.com/");
 const client_id = "interactive.public.short";
 const client_secret = "secret";
 const code_challenge_method = "S256";
 let authServer: oauth.AuthorizationServer;
 const state = "{}";
-const baseUrl = new URL((document.querySelector("base").href || "/") );
+const baseUrl = new URL(document.querySelector("base").href || "/");
 
 export const authenticate = async () => {
   const currentUrl = new URL(window.location.href);
@@ -22,45 +20,48 @@ export const authenticate = async () => {
     history.replaceState(null, "", "/");
     return;
   }
-  
+
   const client: oauth.Client = {client_id};
-  const redirect_uri = baseUrl + "oauth/callback"
-  
+  const redirect_uri = baseUrl + "oauth/callback";
+
   if (currentUrl.pathname === baseUrl.pathname + "oauth/callback") {
-    const params = oauth.validateAuthResponse(authServer, client, currentUrl, state)
+    const params = oauth.validateAuthResponse(
+      authServer,
+      client,
+      currentUrl,
+      state,
+    );
     let clientAuth = oauth.ClientSecretPost(client_secret);
     const code_verifier = sessionStorage.getItem("code_verifier");
-    sessionStorage.removeItem("code_verifier"); 
+    sessionStorage.removeItem("code_verifier");
     const response = await oauth.authorizationCodeGrantRequest(
-        authServer,
-        client,
-        clientAuth,
-        params,
-        redirect_uri,
-        code_verifier,
-      );
-    const token = await response.json().catch(e => e);
+      authServer,
+      client,
+      clientAuth,
+      params,
+      redirect_uri,
+      code_verifier,
+    );
+    const token = await response.json().catch((e) => e);
     if (!response.ok || token instanceof Error) {
       console.error(token.error);
     } else {
-        sessionStorage.setItem("token", JSON.stringify(token));
+      sessionStorage.setItem("token", JSON.stringify(token));
     }
-    history.replaceState(null, "", "/");
-    
-  } 
-  else if (currentUrl.pathname === baseUrl.pathname + "oauth/logout") {
+    history.replaceState(null, "", baseUrl.toString());
+  } else if (currentUrl.pathname === baseUrl.pathname + "oauth/logout") {
     const token = JSON.parse(sessionStorage.getItem("token")!);
     const endSessionUrl = new URL(authServer.end_session_endpoint);
     sessionStorage.removeItem("token");
     const params = encodedStringFromObject(
-        {
-          id_token_hint: token.id_token,
-          post_logout_redirect_uri: baseUrl.toString(),
-        },
-        encodeURIComponent,
-        "&",
-      );
-      
+      {
+        id_token_hint: token.id_token,
+        post_logout_redirect_uri: baseUrl.toString(),
+      },
+      encodeURIComponent,
+      "&",
+    );
+
     document.location.href = endSessionUrl.toString() + "?" + params;
   } else {
     const code_verifier = oauth.generateRandomCodeVerifier();
@@ -69,10 +70,8 @@ export const authenticate = async () => {
       await oauth.calculatePKCECodeChallenge(code_verifier);
     const authorizationUrl = new URL(authServer.authorization_endpoint!);
     authorizationUrl.searchParams.set("client_id", client.client_id);
-    authorizationUrl.searchParams.set(
-      "redirect_uri", redirect_uri
-    );
-    authorizationUrl.searchParams.set('state', state);
+    authorizationUrl.searchParams.set("redirect_uri", redirect_uri);
+    authorizationUrl.searchParams.set("state", state);
     authorizationUrl.searchParams.set("response_type", "code");
     authorizationUrl.searchParams.set(
       "scope",
@@ -88,13 +87,13 @@ export const authenticate = async () => {
 };
 
 export function encodedStringFromObject(
-    o: any,
-    encoding: (arg0: string) => string = encodeURIComponent,
-    seperator = "&",
-  ) {
-    return Object.keys(o)
-      .map((key) => {
-        return `${key}=${encoding(o[key])}`;
-      })
-      .join(seperator);
-  }
+  o: any,
+  encoding: (arg0: string) => string = encodeURIComponent,
+  seperator = "&",
+) {
+  return Object.keys(o)
+    .map((key) => {
+      return `${key}=${encoding(o[key])}`;
+    })
+    .join(seperator);
+}
