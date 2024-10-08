@@ -6,7 +6,7 @@ import path from "path";
 import { networkInterfaces } from "os";
 import esbuild from "esbuild";
 import { copy } from "esbuild-plugin-copy";
-import "process";
+import process from "process";
 
 const projectRootDir = process.cwd();
 

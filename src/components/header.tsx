@@ -8,7 +8,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const AppShellHeader = (props: Partial<any>) => {
+export const AppShellHeader = () => {
   const styles = useStyles();
   return (
     <header id="Header" className={styles.header}>
