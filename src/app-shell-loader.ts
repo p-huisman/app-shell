@@ -70,12 +70,12 @@ async function main() {
   document.body.style.margin = "0";
   document.body.style.padding = "0";
 
-  if (sessionStorage.getItem("redirect")) {
-    const location = sessionStorage.getItem("redirect");
-    sessionStorage.removeItem("redirect");
+  if (localStorage.getItem("redirect")) {
+    const location = localStorage.getItem("redirect");
+    localStorage.removeItem("redirect");
     history.replaceState(null, "", location);
   }
-  
+
   const config = await loadAppShellConfig();
 
   window.addEventListener(
