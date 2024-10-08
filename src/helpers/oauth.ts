@@ -16,11 +16,6 @@ export const authenticate = async () => {
       .discoveryRequest(issuer)
       .then((response) => oauth.processDiscoveryResponse(issuer, response));
   }
-//   const token = localStorage.getItem("token");
-//   if (token && currentUrl.pathname !== "/oauth/logout") {
-//     history.replaceState(null, "", "/");
-//     return;
-//   }
 
   const client: oauth.Client = {client_id};
   const redirect_uri = baseUrl + "oauth/callback";
@@ -33,8 +28,8 @@ export const authenticate = async () => {
       state,
     );
     let clientAuth = oauth.ClientSecretPost(client_secret);
-    const code_verifier = localStorage.getItem("code_verifier");
-    localStorage.removeItem("code_verifier");
+    const code_verifier = sessionStorage.getItem("code_verifier");
+    sessionStorage.removeItem("code_verifier");
     const response = await oauth.authorizationCodeGrantRequest(
       authServer,
       client,
@@ -47,14 +42,14 @@ export const authenticate = async () => {
     if (!response.ok || token instanceof Error) {
       console.error(token.error);
     } else {
-      localStorage.setItem("token", JSON.stringify(token));
+      sessionStorage.setItem("token", JSON.stringify(token));
     }
     history.replaceState(null, "", baseUrl.toString());
   } else if (currentUrl.pathname === baseUrl.pathname + "oauth/logout") {
     // end session
-    const token = JSON.parse(localStorage.getItem("token")!);
+    const token = JSON.parse(sessionStorage.getItem("token")!);
     const endSessionUrl = new URL(authServer.end_session_endpoint);
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     const params = encodedStringFromObject(
       {
         id_token_hint: token.id_token,
@@ -68,7 +63,7 @@ export const authenticate = async () => {
   } else {
     // authorize
     const code_verifier = oauth.generateRandomCodeVerifier();
-    localStorage.setItem("code_verifier", code_verifier);
+    sessionStorage.setItem("code_verifier", code_verifier);
     const code_challenge =
       await oauth.calculatePKCECodeChallenge(code_verifier);
     const authorizationUrl = new URL(authServer.authorization_endpoint!);

@@ -60,7 +60,6 @@ function initSingleSpa(config: any) {
     app.customProps = {foo: "bar"};
   });
   applications.forEach(registerApplication);
-  console.log({routes, applications})
   layoutEngine.activate();
 
   start();
@@ -70,9 +69,9 @@ async function main() {
   document.body.style.margin = "0";
   document.body.style.padding = "0";
 
-  if (localStorage.getItem("redirect")) {
-    const location = localStorage.getItem("redirect");
-    localStorage.removeItem("redirect");
+  if (sessionStorage.getItem("redirect")) {
+    const location = sessionStorage.getItem("redirect");
+    sessionStorage.removeItem("redirect");
     history.replaceState(null, "", location);
   }
 
