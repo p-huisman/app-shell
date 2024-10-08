@@ -1,4 +1,4 @@
-import {makeStyles, MenuGroup, MenuGroupHeader} from "@fluentui/react-components";
+import {Button, makeStyles, MenuGroup, MenuGroupHeader} from "@fluentui/react-components";
 import React, {useEffect, useState} from "react";
 import {
   Avatar,
@@ -19,8 +19,14 @@ const useStyles = makeStyles({
     gap: ".5em",
     justifyContent: "flex-end",
   },
-  avatar: {
+  avatarButton: {
+    appearance: "none",
+    border: "none",
+    backgroundColor: "transparent",
+    margin: 0,
+    padding: 0,
     cursor: "pointer",
+    minWidth: "unset"
   }
 });
 
@@ -43,13 +49,15 @@ export const AppShellHeader = () => {
     <header id="Header" className={styles.header}>
       <Menu>
         <MenuTrigger disableButtonEnhancement>
+          <Button className={styles.avatarButton}>
           <Avatar
             data-href="oauth"
-            className={styles.avatar}
+            
             aria-label={userName}
             name={userName}
             color="brand"
           ></Avatar>
+          </Button>
         </MenuTrigger>
         <MenuPopover>
           <MenuList>
