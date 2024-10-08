@@ -1,0 +1,14 @@
+{
+    "imports": {
+      "react": "https://esm.sh/react@18.2.0",
+      "react/": "https://esm.sh/react@18.2.0/",
+      "react-dom": "https://esm.sh/react-dom@18.2.0",
+      "react-dom/": "https://esm.sh/react-dom@18.2.0/",
+      "@app-shell-app/index": "/app-shell-dashboard.js",
+      "@app-shell-app/premie": "/premie.js"
+    },
+    "appShell" : "/app-shell.js",
+    "apps": [
+       { "name" : "@app-shell-app/premie", "title": "Premie berekening", "href": "premie" }
+    ]
+  }
