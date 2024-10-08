@@ -75,6 +75,7 @@ async function main() {
     sessionStorage.removeItem("redirect");
     history.replaceState(null, "", location);
   }
+  
   const config = await loadAppShellConfig();
 
   window.addEventListener(

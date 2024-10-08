@@ -12,24 +12,27 @@ export const AppShellHeader = () => {
   const styles = useStyles();
   return (
     <header id="Header" className={styles.header}>
-      <button
-        onClick={() => {
-          const url = new URL(document.querySelector("base").href + "oauth");
-          console.log(url.pathname);
-          history.pushState({}, "", url.pathname);
+      <a
+        href="oauth"
+        onClick={(e) => {
+          e.preventDefault();
+          const target = e.target as HTMLAnchorElement;
+          history.pushState({}, "", target.href);
         }}
       >
         Login
-      </button>
-      <button
-        onClick={() => {
-            const url = new URL(document.querySelector("base").href + "oauth/logout");
-            console.log(url.pathname);
-            history.pushState({}, "", url.pathname);
-          }}
+      </a>
+      &nbsp;|&nbsp;
+      <a
+        href="oauth/logout"
+        onClick={(e) => {
+          e.preventDefault();
+          const target = e.target as HTMLAnchorElement;
+          history.pushState({}, "", target.href);
+        }}
       >
         Logout
-      </button>
+      </a>
     </header>
   );
 };
