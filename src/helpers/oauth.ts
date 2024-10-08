@@ -1,7 +1,7 @@
 import * as oauth from "oauth4webapi";
 
 const issuer = new URL("https://demo.duendesoftware.com/");
-const client_id = "interactive.public.short";
+const client_id = "interactive.public";
 const client_secret = "secret";
 const code_challenge_method = "S256";
 let authServer: oauth.AuthorizationServer;
@@ -45,6 +45,7 @@ export const authenticate = async () => {
       sessionStorage.setItem("token", JSON.stringify(token));
     }
     history.replaceState(null, "", baseUrl.toString());
+    window.dispatchEvent(new CustomEvent("oauthDone"));
   } else if (currentUrl.pathname === baseUrl.pathname + "oauth/logout") {
     // end session
     const token = JSON.parse(sessionStorage.getItem("token")!);
@@ -83,6 +84,24 @@ export const authenticate = async () => {
     document.location.href = authorizationUrl.toString();
   }
 };
+
+export const getUserInfo = async () => {
+    if (!authServer) {
+        authServer = await oauth
+          .discoveryRequest(issuer)
+          .then((response) => oauth.processDiscoveryResponse(issuer, response));
+      }
+    const token = JSON.parse(sessionStorage.getItem("token")!);
+    if (!token) {
+        return null;
+    }
+    const client: oauth.Client = {client_id};
+    const response = (await oauth.userInfoRequest(authServer, client, token.access_token))
+    if (!response.ok) {
+        return Promise.reject(response.statusText);
+    }
+    return response.json();
+}
 
 export function encodedStringFromObject(
   o: any,
