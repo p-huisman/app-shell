@@ -1,12 +1,12 @@
 import express from "express";
-import { WebSocketServer } from "ws";
+import {WebSocketServer} from "ws";
 import serveIndex from "serve-index";
 import http from "http";
 import path from "path";
-import  fs from "fs"; 
-import { networkInterfaces } from "os";
+import fs from "fs";
+import {networkInterfaces} from "os";
 import esbuild from "esbuild";
-import { copy } from "esbuild-plugin-copy";
+import {copy} from "esbuild-plugin-copy";
 import process from "process";
 
 const projectRootDir = process.cwd();
@@ -28,7 +28,7 @@ function getIpAddresses() {
   return ifs ? ifs : [];
 }
 
-const app = express({ strict: false });
+const app = express({strict: false});
 
 app.use((req, res, next) => {
   res.setHeader("access-control-allow-origin", "*");
@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 });
 
 const server = http.createServer(app);
-const wss = new WebSocketServer({ clientTracking: false, noServer: true });
+const wss = new WebSocketServer({clientTracking: false, noServer: true});
 
 server.on("upgrade", function (request, socket, head) {
   if (!connections) {
@@ -62,12 +62,12 @@ const buildPlugin = {
   setup: (build) => {
     build.onStart(() => {
       console.log(
-        "ES build started " + build.initialOptions.entryPoints.join(", ")
+        "ES build started " + build.initialOptions.entryPoints.join(", "),
       );
     });
     build.onEnd((result) => {
       console.log(
-        "ES build finish " + build.initialOptions.entryPoints.join(", ")
+        "ES build finish " + build.initialOptions.entryPoints.join(", "),
       );
       if (broadcast) {
         broadcast(result ? result : {});
@@ -80,7 +80,7 @@ const buildPlugin = {
 };
 
 export async function startServer() {
-  app.use(express.static("./dist"), serveIndex("./dist", { icons: true }));
+  app.use(express.static("./dist"), serveIndex("./dist", {icons: true}));
 
   app.get("*", function (req, res) {
     res.status(404).sendFile(path.join(projectRootDir, "404.html"));
@@ -123,13 +123,22 @@ function broadcast(data) {
 }
 
 const appShellBuildOptions = {
-  entryPoints: ["./src/app-shell.tsx", "./src/app-shell-oauth.tsx", "./src/app-shell-dashboard.tsx"],
+  entryPoints: [
+    "./src/app-shell.tsx",
+    "./src/app-shell-oauth.tsx",
+    "./src/app-shell-dashboard.tsx",
+  ],
   outdir: "dist",
   bundle: true,
   platform: "browser",
   format: "esm",
   target: "es6",
-  external: ["react", "react-dom"],
+  external: [
+    "react",
+    "react-dom",
+    "@griffel/react",
+    "@fluentui/react-icons",
+  ],
   plugins: [buildPlugin],
   sourcemap: env === "production" ? false : "inline",
   sourcesContent: true,
@@ -137,7 +146,7 @@ const appShellBuildOptions = {
   allowOverwrite: true,
 };
 
-const from =  ["./src/index.html", "./src/app-shell.json"];
+const from = ["./src/index.html", "./src/app-shell.json"];
 
 const appShellLoaderBuildOptions = {
   entryPoints: ["./src/app-shell-loader.ts"],
@@ -183,11 +192,11 @@ async function main() {
   if (env === "production") {
     fs.copyFileSync(
       path.join(projectRootDir, "github-pages/index.html"),
-      path.join(projectRootDir, "dist/index.html")
+      path.join(projectRootDir, "dist/index.html"),
     );
     fs.copyFileSync(
       path.join(projectRootDir, "github-pages/404.html"),
-      path.join(projectRootDir, "dist/404.html")
+      path.join(projectRootDir, "dist/404.html"),
     );
   }
 }
