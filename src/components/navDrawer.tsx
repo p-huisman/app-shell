@@ -1,4 +1,3 @@
-import { ComponentProps } from "@fluentui/react-components";
 import React from "react";
 
 import {
@@ -10,7 +9,7 @@ import {
   NavSectionHeader,
 } from "@fluentui/react-nav-preview";
 
-import {makeStyles, tokens } from "@fluentui/react-components";
+import {makeStyles, tokens, ComponentProps } from "@fluentui/react-components";
 
 import {
   Board20Filled,

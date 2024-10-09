@@ -9,8 +9,9 @@ import {
   createLightTheme,
   FluentProvider,
   makeStyles,
-  webLightTheme,
 } from "@fluentui/react-components";
+import {AppShellState, IAppShellMessage} from "./helpers/app-shell-state";
+import AppShellMessage from "./components/appShellMessage";
 
 const myBrand = {
   "10": "#000000",
@@ -20,7 +21,7 @@ const myBrand = {
   "50": "#004612",
   "60": "#005618",
   "70": "#00671f",
-  "80": "#1d8551", 
+  "80": "#1d8551",
   "90": "#218935",
   "100": "#3e9949",
   "110": "#59a85e",
@@ -32,7 +33,7 @@ const myBrand = {
 };
 
 const light = createLightTheme(myBrand);
-const dark = createDarkTheme(myBrand);
+// const dark = createDarkTheme(myBrand);
 
 const rootNode = document.getElementById("app-shell");
 if (!rootNode) {
@@ -58,16 +59,53 @@ const defaultApps: AppNavItem[] = [{title: "Dashboard", href: "./"}];
 
 const App = () => {
   const styles = useStyles();
-  const [apps, setApps] = useState(defaultApps);
-  window.addEventListener("initApps", (e: CustomEventInit) => {
-    setApps([...defaultApps, ...e.detail]);
+  const [appShellState, setAppShellState] = useState<AppShellState>(null);
+  const [tick, setTick] = useState(0);
+
+  window.addEventListener(
+    "initApps",
+    (e: CustomEventInit) => {
+      if (!appShellState) {
+        setAppShellState(e.detail);
+      }
+    },
+    {once: true},
+  );
+
+  window.addEventListener("appShellStateChange", (e: CustomEventInit) => {
+    setAppShellState(e.detail);
+    setTick(tick + 1);
   });
+
   window.dispatchEvent(new CustomEvent("appShellReady"));
+
   return (
     <div id="main" className={styles.main}>
       <AppShellHeader />
-      <div id="Content" className={styles.content}></div>
-      <AppShellDrawer appNav={apps} />
+      <div className={styles.content}>
+        <div id="Notifications">
+          {appShellState
+            ? appShellState.messages.map(
+                (message: IAppShellMessage, index: number) => {
+                  return (
+                    <AppShellMessage
+                      key={index}
+                      body={message.body}
+                      intent={message.intent}
+                      onClick={() => {
+                        appShellState.removeMessage(message.id);
+                      }}
+                    />
+                  );
+                },
+              )
+            : null}
+        </div>
+        <div id="Content"></div>
+      </div>
+      {appShellState ? (
+        <AppShellDrawer appNav={[...defaultApps, ...appShellState.apps]} />
+      ) : null}
     </div>
   );
 };

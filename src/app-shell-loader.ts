@@ -4,12 +4,8 @@ import {
   constructRoutes,
   constructLayoutEngine,
 } from "single-spa-layout";
+import { AppShellState } from "./helpers/app-shell-state";
 
-async function loadAppShellConfig() {
-  return await fetch("./app-shell.json")
-    .then((response) => response.json())
-    .catch((e) => e);
-}
 
 function createScriptElement(type: "module" | "importmap"): HTMLScriptElement {
   const script = document.createElement("script");
@@ -17,21 +13,19 @@ function createScriptElement(type: "module" | "importmap"): HTMLScriptElement {
   return script;
 }
 
-function createImportMap(config: any) {
+function createImportMap(state: AppShellState) {
   const imScript = createScriptElement("importmap");
-  imScript.textContent = JSON.stringify({
-    imports: config.imports,
-  });
+  imScript.textContent = state.importMap;
   document.head.appendChild(imScript);
 }
 
-function loadAppShell(config: any) {
+function loadAppShellModule(state: AppShellState) {
   const appShellScript = createScriptElement("module");
-  appShellScript.src = config.appShell;
+  appShellScript.src = state.appShellModule;
   document.head.appendChild(appShellScript);
 }
 
-function initSingleSpa(config: any) {
+function initSingleSpa(state: AppShellState) {
   const base = document.querySelector("base").href || "/";
   const url = new URL(base);
   const pathName = url.pathname;
@@ -39,7 +33,7 @@ function initSingleSpa(config: any) {
     <route default><application name="@app-shell-app/index"></application></route>
     <route path="${pathName}oauth"><application name="@app-shell-app/oauth"></application></route>`;
 
-  config.apps.forEach((app: any) => {
+    state.apps.forEach((app: any) => {
     appTemp += `<route path="${pathName}${app.href}"><application name="${app.name}"></application></route>`;
   });
 
@@ -57,11 +51,10 @@ function initSingleSpa(config: any) {
   const layoutEngine = constructLayoutEngine({routes, applications});
 
   applications.forEach((app) => {
-    app.customProps = {foo: "bar"};
+    app.customProps = {appShellState: state};
   });
   applications.forEach(registerApplication);
   layoutEngine.activate();
-
   start();
 }
 
@@ -75,22 +68,27 @@ async function main() {
     history.replaceState(null, "", location);
   }
 
-  const config = await loadAppShellConfig();
+  let initDone = false;
+  window.addEventListener("appShellStateChange", () => {
+    if (!initDone && appShellState.configLoaded) {
+      initDone = true;
+      createImportMap(appShellState);
+      loadAppShellModule(appShellState);
+    }
+  });
+  const appShellState = AppShellState.getInstance("./app-shell.json");
 
   window.addEventListener(
     "appShellReady",
     () => {
-      window.dispatchEvent(new CustomEvent("initApps", {detail: config.apps}));
+      window.dispatchEvent(new CustomEvent("initApps", {detail: appShellState}));
       requestAnimationFrame(() => {
-        initSingleSpa(config);
+        initSingleSpa(appShellState);
       });
-    },
-    {once: true},
+    }, {once: true},
   );
 
-  createImportMap(config);
-  //   initSingleSpa(config);
-  loadAppShell(config);
+  
 }
 
 main();

@@ -27,7 +27,7 @@ export const authenticate = async () => {
       currentUrl,
       state,
     );
-    let clientAuth = oauth.ClientSecretPost(client_secret);
+    const clientAuth = oauth.ClientSecretPost(client_secret);
     const code_verifier = sessionStorage.getItem("code_verifier");
     sessionStorage.removeItem("code_verifier");
     const response = await oauth.authorizationCodeGrantRequest(
