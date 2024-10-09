@@ -26,7 +26,14 @@ const useStyles = makeStyles({
     margin: 0,
     padding: 0,
     cursor: "pointer",
-    minWidth: "unset"
+    minWidth: "unset",
+    "&:hover": {
+      "--colorBrandBackgroundStatic": "var(--colorCompoundBrandBackgroundHover)",
+    },
+    "&:hover:active": {
+      border: "none",
+      backgroundColor: "transparent",
+    }
   }
 });
 
