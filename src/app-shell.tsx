@@ -5,7 +5,7 @@ import AppShellDrawer, {AppNavItem} from "./components/navDrawer";
 import AppShellHeader from "./components/header";
 
 import {
-  createDarkTheme,
+  // createDarkTheme,
   createLightTheme,
   FluentProvider,
   makeStyles,
