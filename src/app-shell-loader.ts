@@ -44,7 +44,10 @@ function initSingleSpa(state: AppShellState) {
   const applications = constructApplications({
     routes,
     loadApp({name}) {
-      return import(name);
+      let importedModule = import(name).catch((e) => {
+        state.addMessage(e.message, "error");
+      });
+      return importedModule;
     },
   });
 

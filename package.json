@@ -34,12 +34,12 @@
   },
   "dependencies": {
     "@fluentui/react-components": "^9.55.0",
-    "@fluentui/react-icons": "^2.0.260",
+    "@fluentui/react-icons": "=2.0.260",
     "@fluentui/react-nav-preview": "^0.9.0",
     "@fluentui/svg-icons": "^1.1.260",
     "oauth4webapi": "^3.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "=18.3.1",
+    "react-dom": "=18.3.1",
     "single-spa": "^6.0.3",
     "single-spa-layout": "^3.0.0",
     "single-spa-react": "^6.0.2"
