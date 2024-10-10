@@ -1,4 +1,10 @@
+import type {Theme} from "@fluentui/react-components";
+import {IAppShellDialogProps} from "../components/appShellDialog";
+
 type AppShellMessageIntent = "info" | "warning" | "error" | "success";
+
+type JSXElement = JSX.Element;
+
 export interface IAppShellMessage {
   id: string;
   intent: AppShellMessageIntent;
@@ -26,9 +32,22 @@ export class AppShellState {
 
   private data: any;
 
-  appShellContext: any;
+  private theme:  "light" | "dark" = "light";
 
-  openDialog: (title: string, body: string) => void;
+  darkTheme: Theme;
+
+  lightTheme: Theme;
+
+  setTheme(theme: "light" | "dark") {
+    this.theme = theme;
+    this.dispatchStateChangeEvent();
+  }
+
+  get currentTheme(): Theme {
+    return this.theme === "dark" ? this.darkTheme : this.lightTheme;
+  }
+
+  openDialog: (props: IAppShellDialogProps) => Promise<string>;
 
   messages: IAppShellMessage[] = [];
 
@@ -57,7 +76,10 @@ export class AppShellState {
     return JSON.stringify({imports: this.data.imports});
   }
 
-  addMessage(body: string | HTMLElement | JSX.Element, intent: AppShellMessageIntent) {
+  addMessage(
+    body: string | HTMLElement | JSXElement,
+    intent: AppShellMessageIntent,
+  ) {
     this.messages.push({id: Math.random().toString(), body, intent});
     this.dispatchStateChangeEvent();
   }

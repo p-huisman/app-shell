@@ -24,13 +24,14 @@ export const AppShellMessage = (props: Partial<ErrorMessageProps>) => {
   const ref = useRef(null);
   const styles = useStyles();
   let jsxElement: JSX.Element;
-  if (typeof props.body === "function") {
-    jsxElement = (props.body as any)();
-  }
-  if (props.body instanceof HTMLElement) {
-    requestAnimationFrame(() => {
-      ref.current?.appendChild(props.body);
-    });
+  if (typeof props.body === "object") {
+    if (props.body instanceof HTMLElement) {
+      requestAnimationFrame(() => {
+        ref.current?.appendChild(props.body);
+      });
+    } else {
+      jsxElement = props.body as JSX.Element;
+    }
   }
 
   return (

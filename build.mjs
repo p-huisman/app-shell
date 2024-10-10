@@ -126,6 +126,7 @@ const appShellBuildOptions = {
   entryPoints: [
     "./src/app-shell.tsx",
     "./src/app-shell-oauth.tsx",
+    "./src/app-shell-msal.tsx",
     "./src/app-shell-dashboard.tsx",
   ],
   outdir: "dist",
@@ -133,12 +134,7 @@ const appShellBuildOptions = {
   platform: "browser",
   format: "esm",
   target: "es6",
-  external: [
-    "react",
-    "react-dom",
-    "@griffel/react",
-    "@fluentui/react-icons",
-  ],
+  external: ["react", "react-dom", "@griffel/react", "@fluentui/react-icons"],
   plugins: [buildPlugin],
   sourcemap: env === "production" ? false : "inline",
   sourcesContent: true,
@@ -146,7 +142,13 @@ const appShellBuildOptions = {
   allowOverwrite: true,
 };
 
-const from = ["./src/index.html", "./src/app-shell.json"];
+const from = [
+  "./src/index.html",
+  "./src/app-shell.json",
+  // "./src/assets/manifest.json",
+  // "./src/assets/icon512_maskable.png",
+  // "./src/assets/icon512_rounded.png",
+];
 
 const appShellLoaderBuildOptions = {
   entryPoints: ["./src/app-shell-loader.ts"],
@@ -161,6 +163,16 @@ const appShellLoaderBuildOptions = {
       assets: {
         from,
         to: ["./dist"],
+      },
+      watch: env !== "production",
+    }),
+    copy({
+      resolveFrom: projectRootDir,
+      assets: {
+        from: [
+          "./src/assets/**/*",
+        ],
+        to: ["./dist/assets"],
       },
       watch: env !== "production",
     }),

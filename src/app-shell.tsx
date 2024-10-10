@@ -6,7 +6,7 @@ import AppShellHeader from "./components/header";
 
 import {
   Button,
-  // createDarkTheme,
+  createDarkTheme,
   createLightTheme,
   Dialog,
   DialogActions,
@@ -17,10 +17,11 @@ import {
   DialogTrigger,
   FluentProvider,
   makeStyles,
+  Theme,
 } from "@fluentui/react-components";
 import {AppShellState, IAppShellMessage} from "./helpers/app-shell-state";
 import AppShellMessage from "./components/appShellMessage";
-import {render} from "react-dom";
+import { openDialog } from "./components/appShellDialog";
 
 const myBrand = {
   "10": "#000000",
@@ -42,7 +43,7 @@ const myBrand = {
 };
 
 const light = createLightTheme(myBrand);
-// const dark = createDarkTheme(myBrand);
+const dark = createDarkTheme(myBrand);
 
 const rootNode = document.getElementById("app-shell");
 if (!rootNode) {
@@ -70,43 +71,18 @@ const App = () => {
   const styles = useStyles();
   const [appShellState, setAppShellState] = useState<AppShellState>(null);
   const [tick, setTick] = useState(0);
+  const [theme, setTheme] = useState<Theme>(light);
 
   window.addEventListener(
     "initApps",
     (e: CustomEventInit) => {
       if (!appShellState) {
-        setAppShellState(e.detail);
-
-        e.detail.openDialog = (title: string, body: string) => {
-          requestAnimationFrame(() => {
-            const newElement = document.createElement("div");
-            newElement.classList.add("dialog-container");
-            document.querySelector("#Content").appendChild(newElement);
-            const root = createRoot(newElement);
-
-            const dlg = () => (
-              <FluentProvider theme={light}>
-                <Dialog defaultOpen>
-                  <DialogSurface>
-                    <DialogBody>
-                      <DialogTitle>{title}</DialogTitle>
-                      <DialogContent>
-                        {body}
-                      </DialogContent>
-                      <DialogActions>
-                        <DialogTrigger disableButtonEnhancement>
-                          <Button appearance="secondary">Close</Button>
-                        </DialogTrigger>
-                        <Button appearance="primary">Do Something</Button>
-                      </DialogActions>
-                    </DialogBody>
-                  </DialogSurface>
-                </Dialog>
-              </FluentProvider>
-            );
-            root.render(dlg());
-          });
-        };
+        const state: AppShellState = e.detail;
+        setAppShellState(state);
+        state.darkTheme = dark;
+        state.lightTheme = light;
+        setTheme(state.currentTheme);
+        state.openDialog = openDialog;
       }
     },
     {once: true},
@@ -114,12 +90,16 @@ const App = () => {
 
   window.addEventListener("appShellStateChange", (e: CustomEventInit) => {
     setAppShellState(e.detail);
+    if (e.detail.currentTheme !== theme) {
+      setTheme(e.detail.currentTheme);
+    }
     setTick(tick + 1);
   });
 
   window.dispatchEvent(new CustomEvent("appShellReady"));
 
   return (
+    <FluentProvider theme={theme}>
     <div id="main" className={styles.main}>
       <AppShellHeader />
       <div className={styles.content}>
@@ -147,13 +127,13 @@ const App = () => {
         <AppShellDrawer appNav={[...defaultApps, ...appShellState.apps]} />
       ) : null}
     </div>
+    </FluentProvider>
   );
 };
 
 createRoot(rootNode).render(
   <React.StrictMode>
-    <FluentProvider theme={light}>
+
       <App />
-    </FluentProvider>
   </React.StrictMode>,
 );

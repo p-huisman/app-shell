@@ -1,40 +1,65 @@
-import { Button } from "@fluentui/react-components";
+import {Button} from "@fluentui/react-components";
 import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
+import {AppShellState} from "./helpers/app-shell-state";
+import {IAppShellDialogAction} from "./components/appShellDialog";
 
 const Dashboard = (props: Partial<any>) => {
-  const {appShellState} = props;
-  appShellState?.openDialog("Hello", "info");
+  const state = props.appShellState as AppShellState;
+
   return (
-    
     <div id="dashboard">
       App {new Date().toLocaleTimeString()}
       <p>
-        <Button onClick={() => appShellState.addMessage("Hello", "info")}>
+        <Button onClick={() => state.addMessage("Hello", "info")}>
           Add Message
         </Button>
         <Button
           onClick={() => {
             const body = document.createElement("div");
             body.innerHTML = "Hello";
-            appShellState.addMessage(body, "error");
+            state.addMessage(body, "error");
           }}
         >
           Add Message
         </Button>
         <Button
           onClick={() => {
-            const body = () => <div>Lala</div>;
-            body.innerHTML = "Hello";
-            appShellState.addMessage(body, "success");
+            const body = (<div>Lala</div>) as JSX.Element;
+            state.addMessage(body, "success");
           }}
         >
           Add Message
         </Button>
       </p>
       <p>
-
+        <Button
+          onClick={() => {
+            const actions: IAppShellDialogAction[] = [
+              {
+                id: "close",
+                label: "Nee",
+              },
+              {
+                id: "open",
+                label: "Ja",
+              },
+            ];
+            // open a dialog
+            state.openDialog({
+              body: <div>Doorgaan met het downloaden van de bestanden?</div>,
+              title: <div>Downloaden</div>,
+              modal: true,
+              theme: state.currentTheme,
+              actions,
+            }).then((actionId) => {
+              console.log(`Dialog closed with action: ${actionId}`);
+            })  ;
+          }}
+        >
+          Open Dialog
+        </Button>
       </p>
     </div>
   );
