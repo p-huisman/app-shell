@@ -5,13 +5,22 @@ import AppShellDrawer, {AppNavItem} from "./components/navDrawer";
 import AppShellHeader from "./components/header";
 
 import {
+  Button,
   // createDarkTheme,
   createLightTheme,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
   FluentProvider,
   makeStyles,
 } from "@fluentui/react-components";
 import {AppShellState, IAppShellMessage} from "./helpers/app-shell-state";
 import AppShellMessage from "./components/appShellMessage";
+import {render} from "react-dom";
 
 const myBrand = {
   "10": "#000000",
@@ -67,6 +76,37 @@ const App = () => {
     (e: CustomEventInit) => {
       if (!appShellState) {
         setAppShellState(e.detail);
+
+        e.detail.openDialog = (title: string, body: string) => {
+          requestAnimationFrame(() => {
+            const newElement = document.createElement("div");
+            newElement.classList.add("dialog-container");
+            document.querySelector("#Content").appendChild(newElement);
+            const root = createRoot(newElement);
+
+            const dlg = () => (
+              <FluentProvider theme={light}>
+                <Dialog defaultOpen>
+                  <DialogSurface>
+                    <DialogBody>
+                      <DialogTitle>{title}</DialogTitle>
+                      <DialogContent>
+                        {body}
+                      </DialogContent>
+                      <DialogActions>
+                        <DialogTrigger disableButtonEnhancement>
+                          <Button appearance="secondary">Close</Button>
+                        </DialogTrigger>
+                        <Button appearance="primary">Do Something</Button>
+                      </DialogActions>
+                    </DialogBody>
+                  </DialogSurface>
+                </Dialog>
+              </FluentProvider>
+            );
+            root.render(dlg());
+          });
+        };
       }
     },
     {once: true},

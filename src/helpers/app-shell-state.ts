@@ -28,6 +28,8 @@ export class AppShellState {
 
   appShellContext: any;
 
+  openDialog: (title: string, body: string) => void;
+
   messages: IAppShellMessage[] = [];
 
   configLoaded = false;

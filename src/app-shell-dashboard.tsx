@@ -1,18 +1,20 @@
+import { Button } from "@fluentui/react-components";
 import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
 
 const Dashboard = (props: Partial<any>) => {
   const {appShellState} = props;
-
+  appShellState?.openDialog("Hello", "info");
   return (
+    
     <div id="dashboard">
       App {new Date().toLocaleTimeString()}
       <p>
-        <button onClick={() => appShellState.addMessage("Hello", "info")}>
+        <Button onClick={() => appShellState.addMessage("Hello", "info")}>
           Add Message
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => {
             const body = document.createElement("div");
             body.innerHTML = "Hello";
@@ -20,8 +22,8 @@ const Dashboard = (props: Partial<any>) => {
           }}
         >
           Add Message
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => {
             const body = () => <div>Lala</div>;
             body.innerHTML = "Hello";
@@ -29,7 +31,10 @@ const Dashboard = (props: Partial<any>) => {
           }}
         >
           Add Message
-        </button>
+        </Button>
+      </p>
+      <p>
+
       </p>
     </div>
   );
