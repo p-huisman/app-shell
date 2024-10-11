@@ -3,15 +3,9 @@
   "background_color": "#ffffff",
   "icons": [
     {
-      "purpose": "maskable",
-      "sizes": "512x512",
-      "src": "/app-shell/assets/icon512_maskable.png?v2",
-      "type": "image/png"
-    },
-    {
       "purpose": "any",
       "sizes": "512x512",
-      "src": "/app-shell/assets/icon512_rounded.png?v2",
+      "src": "/app-shell/assets/icon-512x512.png?v2",
       "type": "image/png"
     }
   ],
