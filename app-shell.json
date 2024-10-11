@@ -13,7 +13,7 @@
     "@app-shell-app/index": "./apps/app-shell-dashboard.js",
     "@app-shell-app/oauth": "./apps/app-shell-oauth.js",
     "@app-shell-app/msal": "./apps/app-shell-msal.js",
-    "@app-shell-app/premie": "http://localhost:8001/dist/premie.js"
+    "@app-shell-app/premie": "http://localhost:8080/index.js"
   },
   "appShell": "./app-shell.js",
   "apps": [
