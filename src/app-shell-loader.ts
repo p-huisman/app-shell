@@ -43,6 +43,7 @@ function initSingleSpa(state: AppShellState) {
     `<single-spa-router containerEl="#Content">${appTemp}</single-spa-router>` as string;
   const routes = constructRoutes(template);
 
+
   const applications = constructApplications({
     routes,
     loadApp({name}) {

@@ -79,10 +79,13 @@ export class AppShellState {
   addMessage(
     body: string | HTMLElement | JSXElement,
     intent: AppShellMessageIntent,
-  ) {
-    this.messages.push({id: Math.random().toString(), body, intent});
+  )  {
+    const id = Math.random().toString(36).substring(7);
+    this.messages.push({id, body, intent});
     this.dispatchStateChangeEvent();
+    return id;
   }
+
   removeMessage(id: string) {
     this.messages = this.messages.filter((message) => message.id !== id);
     this.dispatchStateChangeEvent();

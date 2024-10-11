@@ -34,7 +34,6 @@ app.use((req, res, next) => {
   res.setHeader("access-control-allow-origin", "*");
   res.setHeader("access-control-allow-methods", "*");
   res.setHeader("access-control-allow-headers", "*");
-  res.setHeader("X-Powered-By", "P-BUILD");
   next();
 });
 

@@ -25,6 +25,7 @@ const Dashboard = (props: Partial<any>) => {
           Add Message
         </Button>
         <Button
+          appearance="primary"
           onClick={() => {
             const body = (<div>Lala</div>) as JSX.Element;
             state.addMessage(body, "success");
