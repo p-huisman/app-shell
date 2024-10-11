@@ -40,14 +40,14 @@ function initSingleSpa(state: AppShellState) {
   });
 
   const template =
-    `<single-spa-router containerEl="#Content">${appTemp}</single-spa-router>` as string;
+    `<single-spa-router containerEl="#AppArea">${appTemp}</single-spa-router>` as string;
   const routes = constructRoutes(template);
 
 
   const applications = constructApplications({
     routes,
     loadApp({name}) {
-      let importedModule = import(name).catch((e) => {
+      const importedModule = import(name).catch((e) => {
         state.addMessage(e.message, "error");
       });
       return importedModule;

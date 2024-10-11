@@ -32,7 +32,7 @@ export const openDialog = (props: IAppShellDialogProps): Promise<string> => {
   // dialog container
   const newElement = document.createElement("div");
   newElement.classList.add("dialog-container");
-  document.querySelector("#Content").appendChild(newElement);
+  document.querySelector("#AppArea").appendChild(newElement);
   const root = createRoot(newElement);
   const dialogGuid = Math.random().toString(36).substring(7);
 

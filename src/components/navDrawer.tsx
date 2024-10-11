@@ -50,7 +50,6 @@ export const AppShellDrawer = (props: Partial<AppShellNavDrawerProps>) => {
 
   return (
     <div id="NavDrawer" className={styles.navDrawer} ref={this}>
-      <NavSectionHeader><Logo /></NavSectionHeader>
       <NavDrawer
         type="inline"
         open={true}

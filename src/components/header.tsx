@@ -10,6 +10,7 @@ import {
 } from "@fluentui/react-components";
 
 import {getUserInfo} from "../helpers/oauth";
+import Logo from "./logo";
 
 const useStyles = makeStyles({
   header: {
@@ -17,10 +18,18 @@ const useStyles = makeStyles({
     padding: "0.5em 1em 1em 1em ",
     display: "flex",
     gap: ".5em",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     borderBottom: tokens.colorNeutralBackground6,
     borderBottomWidth: "1px",
     borderBottomStyle: "solid",
+  },
+  headerCol1: {
+    flex: 1,
+  },
+  headerCol2: {
+    flex: 1,
+    display: "flex",
+    justifyContent: "flex-end",
   },
   avatarButton: {
     appearance: "none",
@@ -57,6 +66,10 @@ export const AppShellHeader = () => {
 
   return (
     <header id="Header" className={styles.header}>
+      <div className={styles.headerCol1}>
+        <Logo />
+      </div>
+      <div className={styles.headerCol2}>
       <Menu>
         <MenuTrigger disableButtonEnhancement>
           <Button className={styles.avatarButton}>
@@ -112,6 +125,7 @@ export const AppShellHeader = () => {
           </MenuList>
         </MenuPopover>
       </Menu>
+      </div>
     </header>
   );
 };

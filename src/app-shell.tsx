@@ -5,7 +5,6 @@ import AppShellDrawer, {AppNavItem} from "./components/navDrawer";
 import AppShellHeader from "./components/header";
 
 import {
-  tokens,
   createDarkTheme,
   createLightTheme,
   FluentProvider,
@@ -14,7 +13,7 @@ import {
 } from "@fluentui/react-components";
 import {AppShellState, IAppShellMessage} from "./helpers/app-shell-state";
 import AppShellMessage from "./components/appShellMessage";
-import { openDialog } from "./components/appShellDialog";
+import {openDialog} from "./components/appShellDialog";
 
 const myBrand = {
   "10": "#000000",
@@ -48,13 +47,26 @@ const useStyles = makeStyles({
     margin: 0,
     display: "grid",
     height: "100vh",
-    gridTemplateAreas: "'navDrawer header' \r\n" + "'navDrawer content' \r\n",
+    gridTemplateAreas: "'header header' \r\n" + "'navDrawer content' \r\n",
     gridTemplateColumns: "auto 1fr",
     gridTemplateRows: "auto 1fr",
   },
   content: {
     gridArea: "content",
     padding: "0 1em",
+  },
+  appArea: {
+    display: "flex",
+    width: "100%",
+    height: "100%",
+    "> div": {
+      flex: 1,
+      margin: 0,
+    },
+  },
+  
+  notifications: {
+    marginTop: "1em",
   },
 });
 
@@ -93,40 +105,39 @@ const App = () => {
 
   return (
     <FluentProvider theme={theme}>
-    <div id="main" className={styles.main}>
-      <AppShellHeader />
-      <div className={styles.content}>
-        <div id="Notifications">
-          {appShellState
-            ? appShellState.messages.map(
-                (message: IAppShellMessage, index: number) => {
-                  return (
-                    <AppShellMessage
-                      key={index}
-                      body={message.body}
-                      intent={message.intent}
-                      onClick={() => {
-                        appShellState.removeMessage(message.id);
-                      }}
-                    />
-                  );
-                },
-              )
-            : null}
+      <div id="Main" className={styles.main}>
+        <AppShellHeader />
+        <div className={styles.content}>
+          <div id="Notifications" className={styles.notifications}>
+            {appShellState
+              ? appShellState.messages.map(
+                  (message: IAppShellMessage, index: number) => {
+                    return (
+                      <AppShellMessage
+                        key={index}
+                        body={message.body}
+                        intent={message.intent}
+                        onClick={() => {
+                          appShellState.removeMessage(message.id);
+                        }}
+                      />
+                    );
+                  },
+                )
+              : null}
+          </div>
+          <div className={styles.appArea} id="AppArea"></div>
         </div>
-        <div id="Content"></div>
+        {appShellState ? (
+          <AppShellDrawer appNav={[...defaultApps, ...appShellState.apps]} />
+        ) : null}
       </div>
-      {appShellState ? (
-        <AppShellDrawer appNav={[...defaultApps, ...appShellState.apps]} />
-      ) : null}
-    </div>
     </FluentProvider>
   );
 };
 
 createRoot(rootNode).render(
   <React.StrictMode>
-
-      <App />
+    <App />
   </React.StrictMode>,
 );
