@@ -211,8 +211,8 @@ async function main() {
       path.join(projectRootDir, "dist/404.html"),
     );
     fs.copyFileSync(
-      path.join(projectRootDir, "github-pages/assets/mainfest.json"),
-      path.join(projectRootDir, "dist/assets/mainfest.json"),
+      path.join(projectRootDir, "github-pages/assets/manifest.json"),
+      path.join(projectRootDir, "dist/assets/manifest.json"),
     );
   }
 }
