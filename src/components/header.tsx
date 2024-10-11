@@ -1,4 +1,4 @@
-import {Button, makeStyles, MenuGroup, MenuGroupHeader} from "@fluentui/react-components";
+import {Button, makeStyles, MenuGroup, MenuGroupHeader, tokens} from "@fluentui/react-components";
 import React, {useEffect, useState} from "react";
 import {
   Avatar,
@@ -18,6 +18,9 @@ const useStyles = makeStyles({
     display: "flex",
     gap: ".5em",
     justifyContent: "flex-end",
+    borderBottom: tokens.colorNeutralBackground6,
+    borderBottomWidth: "1px",
+    borderBottomStyle: "solid",
   },
   avatarButton: {
     appearance: "none",
@@ -59,7 +62,7 @@ export const AppShellHeader = () => {
           <Button className={styles.avatarButton}>
           <Avatar
             data-href="oauth"
-            
+
             aria-label={userName}
             name={userName}
             color="brand"

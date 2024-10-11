@@ -8,9 +8,9 @@
     "@griffel/react/": "https://esm.sh/@griffel/react@1.5.25/",
     "@fluentui/react-icons": "https://esm.sh/@fluentui/react-icons@2.0.260",
     "@fluentui/react-icons/": "https://esm.sh/@fluentui/react-icons@2.0.260/",
-    "@app-shell-app/index": "./app-shell-dashboard.js",
- "@app-shell-app/oauth": "./app-shell-oauth.js",
-    "@app-shell-app/msal": "./app-shell-msal.js",
+    "@app-shell-app/index": "./apps/app-shell-dashboard.js",
+    "@app-shell-app/oauth": "./apps/app-shell-oauth.js",
+    "@app-shell-app/msal": "./apps/app-shell-msal.js",
     "@app-shell-app/premie": "./premie.js"
   },
   "appShell": "./app-shell.js",
@@ -21,4 +21,4 @@
       "href": "premie"
     }
   ]
- }
+}

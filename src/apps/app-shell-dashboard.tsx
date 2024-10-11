@@ -2,8 +2,8 @@ import {Button} from "@fluentui/react-components";
 import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
-import {AppShellState} from "./helpers/app-shell-state";
-import {IAppShellDialogAction} from "./components/appShellDialog";
+import {AppShellState} from "../helpers/app-shell-state";
+import {IAppShellDialogAction} from "../components/appShellDialog";
 
 const Dashboard = (props: Partial<any>) => {
   const state = props.appShellState as AppShellState;

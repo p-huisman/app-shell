@@ -125,9 +125,9 @@ function broadcast(data) {
 const appShellBuildOptions = {
   entryPoints: [
     "./src/app-shell.tsx",
-    "./src/app-shell-oauth.tsx",
-    "./src/app-shell-msal.tsx",
-    "./src/app-shell-dashboard.tsx",
+    "./src/apps/app-shell-oauth.tsx",
+    "./src/apps/app-shell-msal.tsx",
+    "./src/apps/app-shell-dashboard.tsx",
   ],
   outdir: "dist",
   bundle: true,
@@ -145,9 +145,6 @@ const appShellBuildOptions = {
 const from = [
   "./src/index.html",
   "./src/app-shell.json",
-  // "./src/assets/manifest.json",
-  // "./src/assets/icon512_maskable.png",
-  // "./src/assets/icon512_rounded.png",
 ];
 
 const appShellLoaderBuildOptions = {
