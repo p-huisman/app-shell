@@ -20,7 +20,6 @@
   "apps": [
     {
       "name": "@app-shell-app/test",
-      "href": "test",
       "initOnStart": true
     },
     {

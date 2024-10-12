@@ -55,6 +55,7 @@ export const AppShellDrawer = (props: Partial<AppShellNavDrawerProps>) => {
                 href={navItem.href}
                 onClick={(e) => {
                   e.preventDefault();
+                  console.log("navItem.href", navItem.href);
                   history.pushState({}, "", navItem.href);
                 }}
               >

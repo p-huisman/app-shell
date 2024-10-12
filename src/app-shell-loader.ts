@@ -4,8 +4,7 @@ import {
   constructRoutes,
   constructLayoutEngine,
 } from "single-spa-layout";
-import { AppShellState } from "./helpers/app-shell-state";
-
+import {AppShellState} from "./helpers/app-shell-state";
 
 function createScriptElement(type: "module" | "importmap"): HTMLScriptElement {
   const script = document.createElement("script");
@@ -35,14 +34,17 @@ function initSingleSpa(state: AppShellState) {
     <route path="${pathName}oauth"><application name="@app-shell-app/oauth"></application></route>
     <route path="${pathName}msal"><application name="@app-shell-app/msal"></application></route>`;
 
-    state.apps.forEach((app: any) => {
-    appTemp += `<route path="${pathName}${app.href}"><application name="${app.name}"></application></route>`;
+  state.apps.forEach((app: any) => {
+    appTemp += app.href
+      ? `<route path="${pathName}${app.href}"><application name="${app.name}"></application></route>`
+      : `<route path="${app.name.split("/", 2)[1]}"><application name="${app.name}"></application></route>`;
   });
 
   const template =
     `<single-spa-router containerEl="#AppArea">${appTemp}</single-spa-router>` as string;
   const routes = constructRoutes(template);
 
+  // window.routes = routes;
 
   const applications = constructApplications({
     routes,
@@ -56,7 +58,6 @@ function initSingleSpa(state: AppShellState) {
 
   const layoutEngine = constructLayoutEngine({routes, applications});
 
-
   applications.forEach((app) => {
     if (app.name === "@app-shell-app/index") {
       app.customProps = {appShellState: state};
@@ -66,18 +67,30 @@ function initSingleSpa(state: AppShellState) {
       if (appConfig.initOnStart) {
         const moduleUrl = state.getAppModule(app.name);
         if (moduleUrl) {
-          const appPath = moduleUrl.pathname.substring(0, moduleUrl.pathname.lastIndexOf("/") + 1) + "init.js";
+          const appPath =
+            moduleUrl.pathname.substring(
+              0,
+              moduleUrl.pathname.lastIndexOf("/") + 1,
+            ) + "init.js";
           moduleUrl.pathname = appPath;
-          import(moduleUrl.href).then((module) => {
-            module.init(app, state);
-          }).catch((e) => {
-            state.addMessage(e.message, "error");
-          }); 
+          import(moduleUrl.href)
+            .then((module) => {
+              module.init(app, state);
+            })
+            .catch((e) => {
+              state.addMessage(e.message, "error");
+            });
         }
       } else {
-        state.addMenuItem(app.name, appConfig.title, appConfig.subItems, appConfig.icon);
+        state.addMenuItem(
+          appConfig.name,
+          appConfig.title,
+          appConfig.href,
+          appConfig.subItems,
+          appConfig.icon,
+        );
       }
-    };
+    }
     app.customProps = {appShellState: state};
   });
   applications.forEach(registerApplication);
@@ -108,14 +121,15 @@ async function main() {
   window.addEventListener(
     "appShellReady",
     () => {
-      window.dispatchEvent(new CustomEvent("initApps", {detail: appShellState}));
+      window.dispatchEvent(
+        new CustomEvent("initApps", {detail: appShellState}),
+      );
       requestAnimationFrame(() => {
         initSingleSpa(appShellState);
       });
-    }, {once: true},
+    },
+    {once: true},
   );
-
-
 }
 
 main();

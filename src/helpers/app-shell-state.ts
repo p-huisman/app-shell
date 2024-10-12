@@ -34,7 +34,7 @@ export class AppShellState {
 
   private _menu: any[] = [];
 
-  private theme:  "light" | "dark" = "light";
+  private theme: "light" | "dark" = "light";
 
   darkTheme: Theme;
 
@@ -47,7 +47,10 @@ export class AppShellState {
 
   getAppModule(name: string): URL {
     this.apps.find((app: any) => app.name === name) as string;
-    return new URL(this.data.imports[name], document.querySelector("base").href);
+    return new URL(
+      this.data.imports[name],
+      document.querySelector("base").href,
+    );
   }
 
   get currentTheme(): Theme {
@@ -82,23 +85,32 @@ export class AppShellState {
     return this.data.apps;
   }
 
-  addMenuItem(appName: string, title: string, subItems?: [], icon?: string) {
+  addMenuItem(
+    appName: string,
+    title: string,
+    href: string,
+    subItems?: [],
+    icon?: string,
+  ) {
     const appMenu = this._menu.find((a: any) => a.app.name === appName);
     const app = this.apps.find((a: any) => a.name === appName);
-    // console.log({appMenu}, appName);
+    
     if (appMenu) {
-      
-      appMenu.menu = {name: appName, title, href: app.href,  subItems, icon};
+      if(app.initOnStart) {
+        href = appName.split("/", 2)[1];
+      }
+      console.log(appMenu);
+      appMenu.menu = {name: appName, title, href, subItems, icon};
+      console.log(appMenu.menu);
       this.dispatchStateChangeEvent();
     }
-    console.log(this.menu, this.apps);
   }
 
   get menu() {
     const items: any = [];
     this._menu.forEach((data) => {
       items.push(data.menu);
-    })
+    });
     return items;
   }
 
@@ -109,7 +121,7 @@ export class AppShellState {
   addMessage(
     body: string | HTMLElement | JSXElement,
     intent: AppShellMessageIntent,
-  )  {
+  ) {
     const id = Math.random().toString(36).substring(7);
     this.messages.push({id, body, intent});
     this.dispatchStateChangeEvent();
