@@ -60,8 +60,8 @@ export const AppShellHeader = () => {
   }, []);
 
   async function userInfo() {
-    const userInfo = await getUserInfo();
-    setUserName(userInfo ? userInfo.name : "");
+    const userInfo = await getUserInfo().catch((e) => e);
+    setUserName(userInfo && !(userInfo instanceof Error) ? userInfo.name : "");
   }
 
   return (

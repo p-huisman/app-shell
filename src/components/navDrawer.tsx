@@ -9,13 +9,9 @@ import {
   NavSectionHeader,
 } from "@fluentui/react-nav-preview";
 
-import {makeStyles, tokens, ComponentProps } from "@fluentui/react-components";
+import {makeStyles, tokens, ComponentProps} from "@fluentui/react-components";
 
-import {
-  Board20Filled,
-  Board20Regular,
-  bundleIcon,
-} from "@fluentui/react-icons";
+import {Board20Filled, Board20Regular, bundleIcon} from "@fluentui/react-icons";
 
 import Logo from "./logo";
 
@@ -46,17 +42,12 @@ export declare type AppShellNavDrawerProps = ComponentProps<NavDrawerSlots> &
 
 export const AppShellDrawer = (props: Partial<AppShellNavDrawerProps>) => {
   const styles = useStyles();
-
-
   return (
     <div id="NavDrawer" className={styles.navDrawer} ref={this}>
-      <NavDrawer
-        type="inline"
-        open={true}
-      >
+      <NavDrawer type="inline" open={true}>
         <NavDrawerBody>
           {props.appNav.map((navItem, index) => {
-            return (
+            return navItem?.title && navItem?.href ? (
               <AppItem
                 key={index}
                 as="a"
@@ -69,7 +60,7 @@ export const AppShellDrawer = (props: Partial<AppShellNavDrawerProps>) => {
               >
                 {navItem.title}
               </AppItem>
-            );
+            ) : null;
           })}
         </NavDrawerBody>
       </NavDrawer>

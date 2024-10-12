@@ -96,8 +96,8 @@ export const getUserInfo = async () => {
         return null;
     }
     const client: oauth.Client = {client_id};
-    const response = (await oauth.userInfoRequest(authServer, client, token.access_token))
-    if (!response.ok) {
+    const response = await oauth.userInfoRequest(authServer, client, token.access_token).catch((e) => e);
+    if (!response.ok || response instanceof Error) {
         return Promise.reject(response.statusText);
     }
     return response.json();

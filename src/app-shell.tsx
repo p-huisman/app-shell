@@ -129,7 +129,7 @@ const App = () => {
           <div className={styles.appArea} id="AppArea"></div>
         </div>
         {appShellState ? (
-          <AppShellDrawer appNav={[...defaultApps, ...appShellState.apps]} />
+          <AppShellDrawer appNav={[...defaultApps, ...appShellState.menu]} />
         ) : null}
       </div>
     </FluentProvider>

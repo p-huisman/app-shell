@@ -32,6 +32,8 @@ export class AppShellState {
 
   private data: any;
 
+  private _menu: any[] = [];
+
   private theme:  "light" | "dark" = "light";
 
   darkTheme: Theme;
@@ -41,6 +43,11 @@ export class AppShellState {
   setTheme(theme: "light" | "dark") {
     this.theme = theme;
     this.dispatchStateChangeEvent();
+  }
+
+  getAppModule(name: string): URL {
+    this.apps.find((app: any) => app.name === name) as string;
+    return new URL(this.data.imports[name], document.querySelector("base").href);
   }
 
   get currentTheme(): Theme {
@@ -60,6 +67,9 @@ export class AppShellState {
       this.messages.push(this.data.message);
       return Promise.reject(this.data);
     }
+    this.data.apps.forEach((app: any) => {
+      this._menu.push({app});
+    });
     this.configLoaded = true;
     this.dispatchStateChangeEvent();
   }
@@ -70,6 +80,26 @@ export class AppShellState {
 
   get apps() {
     return this.data.apps;
+  }
+
+  addMenuItem(appName: string, title: string, subItems?: [], icon?: string) {
+    const appMenu = this._menu.find((a: any) => a.app.name === appName);
+    const app = this.apps.find((a: any) => a.name === appName);
+    // console.log({appMenu}, appName);
+    if (appMenu) {
+      
+      appMenu.menu = {name: appName, title, href: app.href,  subItems, icon};
+      this.dispatchStateChangeEvent();
+    }
+    console.log(this.menu, this.apps);
+  }
+
+  get menu() {
+    const items: any = [];
+    this._menu.forEach((data) => {
+      items.push(data.menu);
+    })
+    return items;
   }
 
   get importMap() {

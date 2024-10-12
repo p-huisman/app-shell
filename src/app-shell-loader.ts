@@ -56,7 +56,28 @@ function initSingleSpa(state: AppShellState) {
 
   const layoutEngine = constructLayoutEngine({routes, applications});
 
+
   applications.forEach((app) => {
+    if (app.name === "@app-shell-app/index") {
+      app.customProps = {appShellState: state};
+    }
+    const appConfig = state.apps.find((a: any) => a.name === app.name) as any;
+    if (appConfig) {
+      if (appConfig.initOnStart) {
+        const moduleUrl = state.getAppModule(app.name);
+        if (moduleUrl) {
+          const appPath = moduleUrl.pathname.substring(0, moduleUrl.pathname.lastIndexOf("/") + 1) + "init.js";
+          moduleUrl.pathname = appPath;
+          import(moduleUrl.href).then((module) => {
+            module.init(app, state);
+          }).catch((e) => {
+            state.addMessage(e.message, "error");
+          }); 
+        }
+      } else {
+        state.addMenuItem(app.name, appConfig.title, appConfig.subItems, appConfig.icon);
+      }
+    };
     app.customProps = {appShellState: state};
   });
   applications.forEach(registerApplication);
