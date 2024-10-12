@@ -6,14 +6,11 @@ import {
   NavDrawerBody,
   NavDrawerSlots,
   NavProps,
-  NavSectionHeader,
 } from "@fluentui/react-nav-preview";
 
 import {makeStyles, tokens, ComponentProps} from "@fluentui/react-components";
 
 import {Board20Filled, Board20Regular, bundleIcon} from "@fluentui/react-icons";
-
-import Logo from "./logo";
 
 const useStyles = makeStyles({
   navDrawer: {
@@ -55,7 +52,6 @@ export const AppShellDrawer = (props: Partial<AppShellNavDrawerProps>) => {
                 href={navItem.href}
                 onClick={(e) => {
                   e.preventDefault();
-                  console.log("navItem.href", navItem.href);
                   history.pushState({}, "", navItem.href);
                 }}
               >
