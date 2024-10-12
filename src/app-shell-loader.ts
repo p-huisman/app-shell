@@ -37,7 +37,7 @@ function initSingleSpa(state: AppShellState) {
   state.apps.forEach((app: any) => {
     appTemp += app.href
       ? `<route path="${pathName}${app.href}"><application name="${app.name}"></application></route>`
-      : `<route path="${app.name.split("/", 2)[1]}"><application name="${app.name}"></application></route>`;
+      : `<route path="${pathName}${app.name.split("/", 2)[1]}"><application name="${app.name}"></application></route>`;
   });
 
   const template =
