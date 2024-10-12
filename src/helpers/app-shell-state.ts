@@ -99,9 +99,7 @@ export class AppShellState {
       if(app.initOnStart) {
         href = appName.split("/", 2)[1];
       }
-      console.log(appMenu);
       appMenu.menu = {name: appName, title, href, subItems, icon};
-      console.log(appMenu.menu);
       this.dispatchStateChangeEvent();
     }
   }
