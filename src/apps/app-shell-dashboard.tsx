@@ -34,6 +34,14 @@ const Dashboard = (props: Partial<any>) => {
           Add Message
         </Button>
       </p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
       <p>
         <Button
           onClick={() => {

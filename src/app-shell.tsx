@@ -1,9 +1,7 @@
 import React, {useState} from "react";
 import {createRoot} from "react-dom/client.js";
-
 import AppShellDrawer, {AppNavItem} from "./components/navDrawer";
 import AppShellHeader from "./components/header";
-
 import {
   createDarkTheme,
   createLightTheme,
@@ -48,23 +46,27 @@ const useStyles = makeStyles({
     display: "grid",
     height: "100vh",
     gridTemplateAreas: "'header header' \r\n" + "'navDrawer content' \r\n",
-    gridTemplateColumns: "auto 1fr",
-    gridTemplateRows: "auto 1fr",
+    gridTemplateColumns: "260px calc(100vw - 260px)",
+    gridTemplateRows: "70px  calc(100vh - 70px)",
   },
   content: {
     gridArea: "content",
     padding: "0 1em",
+    overflow: "auto",
   },
   appArea: {
     display: "flex",
     width: "100%",
-    height: "100%",
+    minHeight: "calc(100% - 1em)",
     "> div": {
-      flex: 1,
+      width: "100%",
       margin: 0,
     },
   },
-  
+  footer: {
+    height: "1em",
+    fontSize: "0.9em",
+  },
   notifications: {
     marginTop: "1em",
   },
@@ -127,6 +129,7 @@ const App = () => {
               : null}
           </div>
           <div className={styles.appArea} id="AppArea"></div>
+          <footer className={styles.footer}>(c) 2024 PGGM. Alle rechten voorbehouden.</footer>
         </div>
         {appShellState ? (
           <AppShellDrawer appNav={[...defaultApps, ...appShellState.menu]} />
