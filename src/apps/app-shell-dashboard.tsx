@@ -10,7 +10,7 @@ const Dashboard = (props: Partial<any>) => {
 
   return (
     <div id="dashboard">
-      App {new Date().toLocaleTimeString()}
+      <h1>App-shell</h1>
       <p>
         <Button onClick={() => state.addMessage("Hello", "info")}>
           Add Message
@@ -34,14 +34,7 @@ const Dashboard = (props: Partial<any>) => {
           Add Message
         </Button>
       </p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolar sit amet.</p>
+
       <p>
         <Button
           onClick={() => {
