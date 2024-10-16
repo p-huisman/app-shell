@@ -125,7 +125,6 @@ const appShellBuildOptions = {
   entryPoints: [
     "./src/app-shell.tsx",
     "./src/apps/app-shell-oauth.tsx",
-    "./src/apps/app-shell-msal.tsx",
     "./src/apps/app-shell-dashboard.tsx",
   ],
   outdir: "dist",
