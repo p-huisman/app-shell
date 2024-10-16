@@ -40,10 +40,13 @@ export class AppShellState {
 
   lightTheme: Theme;
 
+  themeColors: any;
+
   setTheme(theme: "light" | "dark") {
     this.theme = theme;
     this.dispatchStateChangeEvent();
   }
+
 
   getAppModule(name: string): URL {
     this.apps.find((app: any) => app.name === name) as string;
@@ -70,6 +73,9 @@ export class AppShellState {
       this.messages.push(this.data.message);
       return Promise.reject(this.data);
     }
+
+    this.themeColors = this.data.theme.colors;
+
     this.data.apps.forEach((app: any) => {
       this._menu.push({app});
     });
@@ -94,7 +100,7 @@ export class AppShellState {
   ) {
     const appMenu = this._menu.find((a: any) => a.app.name === appName);
     const app = this.apps.find((a: any) => a.name === appName);
-    
+
     if (appMenu) {
       if(app.initOnStart) {
         href = document.querySelector("base").href +  appName.split("/", 2)[1];

@@ -57,7 +57,7 @@ const Dashboard = (props: Partial<any>) => {
               actions,
             }).then((actionId) => {
               console.log(`Dialog closed with action: ${actionId}`);
-            })  ;
+            });
           }}
         >
           Open Dialog

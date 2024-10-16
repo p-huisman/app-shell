@@ -13,27 +13,6 @@ import {AppShellState, IAppShellMessage} from "./helpers/app-shell-state";
 import AppShellMessage from "./components/appShellMessage";
 import {openDialog} from "./components/appShellDialog";
 
-const myBrand = {
-  "10": "#000000",
-  "20": "#011800",
-  "30": "#002700",
-  "40": "#00360c",
-  "50": "#004612",
-  "60": "#005618",
-  "70": "#00671f",
-  "80": "#1d8551",
-  "90": "#218935",
-  "100": "#3e9949",
-  "110": "#59a85e",
-  "120": "#73b776",
-  "130": "#8ec68f",
-  "140": "#aad5a9",
-  "150": "#c6e4c5",
-  "160": "#e2f2e2",
-};
-
-const light = createLightTheme(myBrand);
-const dark = createDarkTheme(myBrand);
 
 const rootNode = document.getElementById("app-shell");
 if (!rootNode) {
@@ -78,7 +57,7 @@ const App = () => {
   const styles = useStyles();
   const [appShellState, setAppShellState] = useState<AppShellState>(null);
   const [tick, setTick] = useState(0);
-  const [theme, setTheme] = useState<Theme>(light);
+  const [theme, setTheme] = useState<Theme>(null);
 
   window.addEventListener(
     "initApps",
@@ -86,6 +65,10 @@ const App = () => {
       if (!appShellState) {
         const state: AppShellState = e.detail;
         setAppShellState(state);
+
+        const light = createLightTheme(state.themeColors);
+        const dark = createDarkTheme(state.themeColors);
+
         state.darkTheme = dark;
         state.lightTheme = light;
         setTheme(state.currentTheme);
@@ -104,6 +87,8 @@ const App = () => {
   });
 
   window.dispatchEvent(new CustomEvent("appShellReady"));
+
+
 
   return (
     <FluentProvider theme={theme}>

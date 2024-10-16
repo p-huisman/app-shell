@@ -6,7 +6,7 @@ import * as msal from "@azure/msal-browser";
 const pca = msal
   .createStandardPublicClientApplication({
     auth: {
-      clientId: "6e33a9dd-56c2-4ce7-a374-95d8f51bccd4",
+      clientId: "APP_SHELL_ID",
       authority:
         "https://login.microsoftonline.com/9e3ee5fe-3a99-45db-ac6e-691e86febef3",
     },

@@ -6,6 +6,13 @@ import {
 } from "single-spa-layout";
 import {AppShellState} from "./helpers/app-shell-state";
 
+let deferredPrompt: any;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
 function createScriptElement(type: "module" | "importmap"): HTMLScriptElement {
   const script = document.createElement("script");
   script.type = type;
@@ -31,8 +38,7 @@ function initSingleSpa(state: AppShellState) {
 
   let appTemp = `
     <route default><application name="@app-shell-app/index"></application></route>
-    <route path="${pathName}oauth"><application name="@app-shell-app/oauth"></application></route>
-    <route path="${pathName}msal"><application name="@app-shell-app/msal"></application></route>`;
+    <route path="${pathName}oauth"><application name="@app-shell-app/oauth"></application></route>`;
 
   state.apps.forEach((app: any) => {
     appTemp += app.href
@@ -43,8 +49,6 @@ function initSingleSpa(state: AppShellState) {
   const template =
     `<single-spa-router containerEl="#AppArea">${appTemp}</single-spa-router>` as string;
   const routes = constructRoutes(template);
-
-  // window.routes = routes;
 
   const applications = constructApplications({
     routes,
@@ -63,33 +67,39 @@ function initSingleSpa(state: AppShellState) {
       app.customProps = {appShellState: state};
     }
     const appConfig = state.apps.find((a: any) => a.name === app.name) as any;
-    if (appConfig) {
-      if (appConfig.initOnStart) {
-        const moduleUrl = state.getAppModule(app.name);
-        if (moduleUrl) {
-          const appPath =
-            moduleUrl.pathname.substring(
-              0,
-              moduleUrl.pathname.lastIndexOf("/") + 1,
-            ) + "init.js";
-          moduleUrl.pathname = appPath;
-          import(moduleUrl.href)
-            .then((module) => {
-              module.init(app, state);
-            })
-            .catch((e) => {
-              state.addMessage(e.message, "error");
-            });
-        }
-      } else {
-        state.addMenuItem(
-          appConfig.name,
-          appConfig.title,
-          appConfig.href,
-          appConfig.subItems,
-          appConfig.icon,
-        );
+
+    if (appConfig && appConfig.initOnStart) {
+      // If the initOnStart is set to true
+      // we load the esm module init.js
+      // The init url path is the same as the app path
+      const moduleUrl = state.getAppModule(app.name);
+      if (moduleUrl) {
+        const appPath =
+          moduleUrl.pathname.substring(
+            0,
+            moduleUrl.pathname.lastIndexOf("/") + 1,
+          ) + "init.js";
+        moduleUrl.pathname = appPath;
+        import(moduleUrl.href)
+          .then((module) => {
+            // Invoke init function on loaded esm module
+            // The exported init function is able to add menu items
+            module.init(app, state);
+          })
+          .catch((e) => {
+            state.addMessage(e.message, "error");
+          });
       }
+    } else if (appConfig) {
+      // If initOnStart is not set or is set to false
+      // we add menu items as configured
+      state.addMenuItem(
+        appConfig.name,
+        appConfig.title,
+        appConfig.href,
+        appConfig.subItems,
+        appConfig.icon,
+      );
     }
     app.customProps = {appShellState: state};
   });
@@ -99,9 +109,11 @@ function initSingleSpa(state: AppShellState) {
 }
 
 async function main() {
+  // no margins for the document body
   document.body.style.margin = "0";
   document.body.style.padding = "0";
 
+  // Check if we are redirected from the 404 page
   if (sessionStorage.getItem("redirect")) {
     const location = sessionStorage.getItem("redirect");
     sessionStorage.removeItem("redirect");
@@ -109,6 +121,7 @@ async function main() {
   }
 
   let initDone = false;
+  // Handle appShellStateChange events
   window.addEventListener("appShellStateChange", () => {
     if (!initDone && appShellState.configLoaded) {
       initDone = true;
@@ -116,11 +129,49 @@ async function main() {
       loadAppShellModule(appShellState);
     }
   });
-  const appShellState = AppShellState.getInstance("./app-shell.json");
+  const appShellState = AppShellState.getInstance(
+    "./app-shell.json?" + new Date().getTime(),
+  );
 
   window.addEventListener(
     "appShellReady",
     () => {
+      if (deferredPrompt) {
+        if (localStorage.getItem("skipInstallApp") !== "true") {
+          requestAnimationFrame(() => {
+            const actions = [
+              {
+                id: "no",
+                label: "Nee",
+              },
+              {
+                id: "never",
+                label: "Nee, nooit",
+              },
+              {
+                id: "yes",
+                label: "Ja",
+              },
+            ];
+            appShellState
+              .openDialog({
+                body: "Wilt u PGGM app-shell installeren?",
+                title: "Installeren",
+                modal: true,
+                theme: appShellState.currentTheme,
+                actions,
+              })
+              .then((actionId) => {
+                if (actionId === "yes") {
+                  deferredPrompt.prompt();
+                } else if (actionId === "never") {
+                  localStorage.setItem("skipInstallApp", "true");
+                }
+              });
+          });
+        }
+      }
+
       window.dispatchEvent(
         new CustomEvent("initApps", {detail: appShellState}),
       );
