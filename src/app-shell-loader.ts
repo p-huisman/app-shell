@@ -101,7 +101,7 @@ function initSingleSpa(state: AppShellState) {
         appConfig.icon,
       );
     }
-    app.customProps = {appShellState: state};
+    app.customProps = {appShellState: state, config: appConfig};
   });
   applications.forEach(registerApplication);
   layoutEngine.activate();
