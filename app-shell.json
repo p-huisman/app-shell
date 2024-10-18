@@ -42,7 +42,12 @@
       "name": "@app-shell-app/premie",
       "title": "Premie berekening",
       "href": "premie",
-      "initOnStart": false
+      "initOnStart": false,
+      "attributes": {
+        "api-base-url": "http://foo.com/api",
+        "tenant-id": "9e3ee5fe-3a99-45db-ac6e-691e86febef3",
+        "client-id": "b5c2e510-4a17-4feb-b219-e55aa5b74144"
+      }
     },
     {
       "name": "@app-shell-app/test",
