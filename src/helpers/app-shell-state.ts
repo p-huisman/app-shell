@@ -10,8 +10,24 @@ export interface IAppShellMessage {
   intent: AppShellMessageIntent;
   body: string | HTMLElement | JSX.Element;
 }
-
+let runningTasks = 0;
 let appShellStateInstance: AppShellState;
+
+window.addEventListener("startAppShellTask", () => {
+  runningTasks++;
+  window.dispatchEvent(
+    new CustomEvent("appShellStateChange", {detail: appShellStateInstance}),
+  );
+});
+
+window.addEventListener("finishAppShellTask", () => {
+  runningTasks--;
+  window.dispatchEvent(
+    new CustomEvent("appShellStateChange", {detail: appShellStateInstance}),
+  );
+});
+
+
 export class AppShellState {
   constructor(private configUrl: string) {
     this.loadConfig();
@@ -36,6 +52,10 @@ export class AppShellState {
 
   private theme: "light" | "dark" = "light";
 
+  get inProgress(): boolean {
+    return runningTasks > 0;
+  }
+
   darkTheme: Theme;
 
   lightTheme: Theme;
@@ -57,6 +77,7 @@ export class AppShellState {
   }
 
   get currentTheme(): Theme {
+
     return this.theme === "dark" ? this.darkTheme : this.lightTheme;
   }
 

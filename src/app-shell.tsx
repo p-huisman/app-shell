@@ -6,18 +6,26 @@ import {
   createDarkTheme,
   createLightTheme,
   FluentProvider,
+  makeStaticStyles,
   makeStyles,
   Theme,
 } from "@fluentui/react-components";
 import {AppShellState, IAppShellMessage} from "./helpers/app-shell-state";
 import AppShellMessage from "./components/appShellMessage";
 import {openDialog} from "./components/appShellDialog";
-
+import AppShellProgress from "./components/appShellProgress";
 
 const rootNode = document.getElementById("app-shell");
 if (!rootNode) {
   throw new Error("No root element found");
 }
+
+const useStaticStyles = makeStaticStyles({
+  body: {
+    margin: 0,
+    padding: 0,
+  },
+});
 
 const useStyles = makeStyles({
   main: {
@@ -49,14 +57,17 @@ const useStyles = makeStyles({
   notifications: {
     marginTop: "1em",
   },
+
 });
 
 const defaultApps: AppNavItem[] = [{title: "Dashboard", href: "./"}];
 
 const App = () => {
+  useStaticStyles();
   const styles = useStyles();
   const [appShellState, setAppShellState] = useState<AppShellState>(null);
   const [tick, setTick] = useState(0);
+  const [inProgress, setInProgress] = useState(false);
   const [theme, setTheme] = useState<Theme>(null);
 
   window.addEventListener(
@@ -83,18 +94,20 @@ const App = () => {
     if (e.detail.currentTheme !== theme) {
       setTheme(e.detail.currentTheme);
     }
+    setInProgress(e.detail.inProgress);
     setTick(tick + 1);
   });
 
   window.dispatchEvent(new CustomEvent("appShellReady"));
-
-
 
   return (
     <FluentProvider theme={theme}>
       <div id="Main" className={styles.main}>
         <AppShellHeader />
         <div className={styles.content}>
+
+          <AppShellProgress active={inProgress} />
+
           <div id="Notifications" className={styles.notifications}>
             {appShellState
               ? appShellState.messages.map(
@@ -114,7 +127,9 @@ const App = () => {
               : null}
           </div>
           <div className={styles.appArea} id="AppArea"></div>
-          <footer className={styles.footer}>(c) 2024 PGGM. Alle rechten voorbehouden.</footer>
+          <footer className={styles.footer}>
+            (c) 2024 PGGM. Alle rechten voorbehouden.
+          </footer>
         </div>
         {appShellState ? (
           <AppShellDrawer appNav={[...defaultApps, ...appShellState.menu]} />

@@ -109,9 +109,28 @@ function initSingleSpa(state: AppShellState) {
 }
 
 async function main() {
-  // no margins for the document body
-  document.body.style.margin = "0";
-  document.body.style.padding = "0";
+
+  // const styles = `
+  //   body{
+  //     margin: 0;
+  //     padding: 0;
+  //   }
+  //   @keyframes indeterminateAnimation {
+  //     0% {
+  //       transform:  translateX(0) scaleX(0);
+  //     }
+  //     40% {
+  //       transform:  translateX(0) scaleX(0.4);
+  //     }
+  //     100% {
+  //       transform:  translateX(100%) scaleX(0.5);
+  //     }
+  //   }
+  // `;
+  // const cs = new CSSStyleSheet();
+  // cs.replaceSync(styles);
+  // document.adoptedStyleSheets = [cs];
+
 
   // Check if we are redirected from the 404 page
   if (sessionStorage.getItem("redirect")) {
