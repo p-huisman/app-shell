@@ -36,6 +36,14 @@ const useStyles = makeStyles({
     gridTemplateColumns: "260px calc(100vw - 260px)",
     gridTemplateRows: "70px  calc(100vh - 70px)",
   },
+  progressbar: {
+    gridArea: "header",
+    zIndex: 1,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+  },
   content: {
     gridArea: "content",
     padding: "0 1em",
@@ -104,10 +112,10 @@ const App = () => {
     <FluentProvider theme={theme}>
       <div id="Main" className={styles.main}>
         <AppShellHeader />
+        <div className={styles.progressbar}>
+        <AppShellProgress  active={true} />
+        </div>
         <div className={styles.content}>
-
-          <AppShellProgress active={inProgress} />
-
           <div id="Notifications" className={styles.notifications}>
             {appShellState
               ? appShellState.messages.map(
