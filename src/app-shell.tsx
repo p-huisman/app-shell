@@ -113,7 +113,7 @@ const App = () => {
       <div id="Main" className={styles.main}>
         <AppShellHeader />
         <div className={styles.progressbar}>
-        <AppShellProgress  active={true} />
+        <AppShellProgress  active={inProgress} />
         </div>
         <div className={styles.content}>
           <div id="Notifications" className={styles.notifications}>

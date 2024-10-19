@@ -43,8 +43,6 @@ const useStyles = makeStyles({
     transformOrigin: "0% 50%",
   },
   progressbarLabel: {
-    /* */
-    // screenreader only
     position: "absolute",
     width: "1px",
     height: "1px",
