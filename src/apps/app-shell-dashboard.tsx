@@ -57,6 +57,10 @@ const Dashboard = (props: Partial<any>) => {
               actions,
             }).then((actionId) => {
               console.log(`Dialog closed with action: ${actionId}`);
+              window.dispatchEvent(new CustomEvent("startAppShellTask", {bubbles: true, composed: true}));
+              setTimeout(() => {
+                window.dispatchEvent(new CustomEvent("finishAppShellTask", {bubbles: true, composed: true}));
+              }, 3000);
             });
           }}
         >
