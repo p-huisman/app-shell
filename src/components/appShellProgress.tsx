@@ -13,21 +13,21 @@ cs.replaceSync(`
       100% {
         transform:  translateX(150%) scaleX(0.5);
       }
-
     }
     `);
 document.adoptedStyleSheets = [...document.adoptedStyleSheets, cs];
 
 const useStyles = makeStyles({
   progressbar: {
-    height: "3px",
+    height: "1px",
     width: "100%",
     overflow: "hidden",
     visibility: "hidden",
     opacity: 0,
+    position: "absolute",
   },
   progresbarVisible: {
-    height: "3px",
+    height: "1px",
     backgroundColor: "var(--colorBrandBackground2)",
     width: "100%",
     overflow: "hidden",
@@ -35,10 +35,10 @@ const useStyles = makeStyles({
   },
   progressbarValue: {
     width: "100%",
-    height: "100%",
+    height: "1px",
     backgroundColor: "var(--colorBrandBackground)",
     backgroundImage:
-      "linear-gradient(to right, var(--colorNeutralBackground6) 0%, var(--colorTransparentBackground) 50%, var(--colorNeutralBackground6) 100%)",
+      "linear-gradient(to right, var(--colorNeutralBackground6) 0%, var(--colorBrandBackground) 50%, var(--colorNeutralBackground6) 100%)",
     animation: "indeterminateAnimation 1.1s infinite linear",
     transformOrigin: "0% 50%",
   },
@@ -52,7 +52,7 @@ const useStyles = makeStyles({
     whiteSpace: "nowrap",
     border: 0,
     margin: "-1",
-
+    visibility: "hidden",
   },
 });
 

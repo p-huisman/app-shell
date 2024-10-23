@@ -68,7 +68,7 @@ const useStyles = makeStyles({
 
 });
 
-const defaultApps: AppNavItem[] = [{title: "Dashboard", href: "./"}];
+const defaultApps: AppNavItem[] = [{title: "Dashboard", href: "./", icon: null}];
 
 const App = () => {
   useStaticStyles();
