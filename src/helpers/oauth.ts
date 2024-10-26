@@ -17,6 +17,11 @@ export const authenticate = async () => {
       .then((response) => oauth.processDiscoveryResponse(issuer, response));
   }
 
+  const removeTokenFromSession = () => {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("app.shell.user");
+  };
+
   const client: oauth.Client = {client_id};
   const redirect_uri = baseUrl + "oauth/callback";
 
@@ -40,17 +45,27 @@ export const authenticate = async () => {
     );
     const token = await response.json().catch((e) => e);
     if (!response.ok || token instanceof Error) {
-      console.error(token.error);
+      removeTokenFromSession();
     } else {
       sessionStorage.setItem("token", JSON.stringify(token));
     }
     history.replaceState(null, "", baseUrl.toString());
-    window.dispatchEvent(new CustomEvent("oauthDone"));
+    const oldValue = sessionStorage.getItem("app.shell.user");
+    const ui = await getUserInfo();
+    const newValue = JSON.stringify(ui);
+    sessionStorage.setItem("app.shell.user", newValue);
+    window.dispatchEvent(
+      new StorageEvent("storage", {
+        key: "app.shell.user",
+        oldValue,
+        newValue,
+      }),
+    );
   } else if (currentUrl.pathname === baseUrl.pathname + "oauth/logout") {
     // end session
     const token = JSON.parse(sessionStorage.getItem("token")!);
     const endSessionUrl = new URL(authServer.end_session_endpoint);
-    sessionStorage.removeItem("token");
+    removeTokenFromSession();
     const params = encodedStringFromObject(
       {
         id_token_hint: token.id_token,
@@ -86,22 +101,24 @@ export const authenticate = async () => {
 };
 
 export const getUserInfo = async () => {
-    if (!authServer) {
-        authServer = await oauth
-          .discoveryRequest(issuer)
-          .then((response) => oauth.processDiscoveryResponse(issuer, response));
-      }
-    const token = JSON.parse(sessionStorage.getItem("token")!);
-    if (!token) {
-        return null;
-    }
-    const client: oauth.Client = {client_id};
-    const response = await oauth.userInfoRequest(authServer, client, token.access_token).catch((e) => e);
-    if (!response.ok || response instanceof Error) {
-        return Promise.reject(response.statusText);
-    }
-    return response.json();
-}
+  if (!authServer) {
+    authServer = await oauth
+      .discoveryRequest(issuer)
+      .then((response) => oauth.processDiscoveryResponse(issuer, response));
+  }
+  const token = JSON.parse(sessionStorage.getItem("token")!);
+  if (!token) {
+    return null;
+  }
+  const client: oauth.Client = {client_id};
+  const response = await oauth
+    .userInfoRequest(authServer, client, token.access_token)
+    .catch((e) => e);
+  if (!response.ok || response instanceof Error) {
+    return Promise.reject(response.statusText);
+  }
+  return response.json();
+};
 
 export function encodedStringFromObject(
   o: any,

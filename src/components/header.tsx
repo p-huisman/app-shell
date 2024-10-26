@@ -49,19 +49,26 @@ const useStyles = makeStyles({
   }
 });
 
+const userInfoFromSession = () => { 
+  const userInfo = sessionStorage.getItem("app.shell.user") ? JSON.parse(sessionStorage.getItem("app.shell.user")) : null;
+  return userInfo;
+}
+
 export const AppShellHeader = () => {
   const styles = useStyles();
-  const [userName, setUserName] = useState("");
-  useEffect(() => {
-    window.addEventListener("oauthDone", () => {
-      userInfo();
+  const [userName, setUserName] = useState(userInfoFromSession()?.name );
+  useEffect(() => {  
+    window.addEventListener("storage", (e: StorageEvent) => {
+      if(e.key === "app.shell.user") {
+        userInfo();
+      }
     });
     userInfo();
   }, []);
 
   async function userInfo() {
-    const userInfo = await getUserInfo().catch((e) => e);
-    setUserName(userInfo && !(userInfo instanceof Error) ? userInfo.name : "");
+    const userInfo  = userInfoFromSession();
+    setUserName(userInfo && userInfo?.name ? userInfo.name : "");
   }
 
   return (
