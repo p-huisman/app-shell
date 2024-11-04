@@ -69,9 +69,9 @@ export const AppShellProgress = (props: AppShellProgressProps) => {
       >
         <div className={styles.progressbarValue}></div>
       </div>
-      <label id="ProgressbarLabel" className={styles.progressbarLabel}>
+      <span id="ProgressbarLabel" className={styles.progressbarLabel}>
         Loading...
-      </label>
+      </span>
     </div>
   );
 };
