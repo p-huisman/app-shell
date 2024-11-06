@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run build && npx local-web-server -p 9090 -d ./dist --spa index.html",
     "clean": "rimraf dist",
-    "build": "npm run clean && cross-env NODE_ENV=production node build.mjs",
+    "build": "cross-env NODE_ENV=production node build.mjs",
     "develop": "npm run clean && cross-env node build.mjs",
     "lint": "eslint --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
