@@ -1,17 +1,24 @@
-import {Button} from "@fluentui/react-components";
+import {Button, makeStyles} from "@fluentui/react-components";
 import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
 import {AppShellState} from "../helpers/app-shell-state";
 import {IAppShellDialogAction} from "../components/appShellDialog";
 
+const useStyles = makeStyles({
+  buttonRow: {
+    display: "flex",
+    gap: ".5em",
+  },
+});
+
 const Dashboard = (props: Partial<any>) => {
   const state = props.appShellState as AppShellState;
-
+  const styles = useStyles();
   return (
     <div id="dashboard">
       <h1>App-shell</h1>
-      <p>
+      <p className={styles.buttonRow}>
         <Button onClick={() => state.addMessage("Hello", "info")}>
           Add Message
         </Button>
@@ -35,7 +42,7 @@ const Dashboard = (props: Partial<any>) => {
         </Button>
       </p>
 
-      <p>
+      <p className={styles.buttonRow}>
         <Button
           onClick={() => {
             const actions: IAppShellDialogAction[] = [

@@ -10,7 +10,9 @@ export interface IAppShellMessage {
   intent: AppShellMessageIntent;
   body: string | HTMLElement | JSX.Element;
 }
+
 let runningTasks = 0;
+
 let appShellStateInstance: AppShellState;
 
 window.addEventListener("startAppShellTask", () => {
@@ -26,7 +28,6 @@ window.addEventListener("finishAppShellTask", () => {
     new CustomEvent("appShellStateChange", {detail: appShellStateInstance}),
   );
 });
-
 
 export class AppShellState {
   constructor(private configUrl: string) {
@@ -67,7 +68,6 @@ export class AppShellState {
     this.dispatchStateChangeEvent();
   }
 
-
   getAppModule(name: string): URL {
     this.apps.find((app: any) => app.name === name) as string;
     return new URL(
@@ -77,7 +77,6 @@ export class AppShellState {
   }
 
   get currentTheme(): Theme {
-
     return this.theme === "dark" ? this.darkTheme : this.lightTheme;
   }
 
@@ -123,8 +122,8 @@ export class AppShellState {
     const app = this.apps.find((a: any) => a.name === appName);
 
     if (appMenu) {
-      if(app.initOnStart) {
-        href = document.querySelector("base").href +  appName.split("/", 2)[1];
+      if (app.initOnStart) {
+        href = document.querySelector("base").href + appName.split("/", 2)[1];
       }
       appMenu.menu = {name: appName, title, href, subItems, icon};
       this.dispatchStateChangeEvent();
@@ -150,6 +149,15 @@ export class AppShellState {
     const id = Math.random().toString(36).substring(7);
     this.messages.push({id, body, intent});
     this.dispatchStateChangeEvent();
+    requestAnimationFrame(() => {
+      document
+        .querySelector("#Message" + id)
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "nearest",
+        });
+    });
     return id;
   }
 

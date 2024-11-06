@@ -16,6 +16,7 @@ const useStyles = makeStyles({
 
 interface ErrorMessageProps {
   intent: "info" | "warning" | "error" | "success";
+  id: string;
   body: string | JSX.Element | HTMLElement;
   onClick: () => void;
 }
@@ -35,7 +36,7 @@ export const AppShellMessage = (props: Partial<ErrorMessageProps>) => {
   }
 
   return (
-    <MessageBar intent={props.intent} className={styles.message}>
+    <MessageBar id={"Message" + props.id} intent={props.intent} className={styles.message}>
       <MessageBarBody ref={ref}>
         {typeof props.body === "string" ? props.body : null}
         {jsxElement}

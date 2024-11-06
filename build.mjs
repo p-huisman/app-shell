@@ -146,7 +146,7 @@ const from = [
 ];
 
 const appShellLoaderBuildOptions = {
-  entryPoints: ["./src/app-shell-loader.ts"],
+  entryPoints: ["./src/app-shell-loader.ts", "./src/service-worker.ts"],
   outdir: "dist",
   bundle: true,
   platform: "browser",

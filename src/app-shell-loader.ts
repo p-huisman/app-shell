@@ -110,26 +110,20 @@ function initSingleSpa(state: AppShellState) {
 
 async function main() {
 
-  // const styles = `
-  //   body{
-  //     margin: 0;
-  //     padding: 0;
-  //   }
-  //   @keyframes indeterminateAnimation {
-  //     0% {
-  //       transform:  translateX(0) scaleX(0);
-  //     }
-  //     40% {
-  //       transform:  translateX(0) scaleX(0.4);
-  //     }
-  //     100% {
-  //       transform:  translateX(100%) scaleX(0.5);
-  //     }
-  //   }
-  // `;
-  // const cs = new CSSStyleSheet();
-  // cs.replaceSync(styles);
-  // document.adoptedStyleSheets = [cs];
+  const registerServiceWorker = async () => {
+    if ("serviceWorker" in navigator) {
+      try {
+        const base = document.querySelector("base").href || "/"
+        const basePath = new URL(base).pathname === "/" ? "" : new URL(base).pathname;
+        await navigator.serviceWorker.register(basePath + "service-worker.js", {
+          scope: basePath === "" ? undefined : basePath,
+        });
+      } catch (error) {
+        console.error(`Registration failed with ${error}`);
+      }
+    }
+  };
+  registerServiceWorker();
 
 
   // Check if we are redirected from the 404 page

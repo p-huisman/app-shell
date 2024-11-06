@@ -122,6 +122,7 @@ const App = () => {
                   (message: IAppShellMessage, index: number) => {
                     return (
                       <AppShellMessage
+                        id={message.id}
                         key={index}
                         body={message.body}
                         intent={message.intent}
