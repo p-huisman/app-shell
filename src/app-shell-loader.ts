@@ -109,7 +109,6 @@ function initSingleSpa(state: AppShellState) {
 }
 
 async function main() {
-
   const registerServiceWorker = async () => {
     if ("serviceWorker" in navigator) {
       try {
