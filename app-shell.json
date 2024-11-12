@@ -14,7 +14,7 @@
     "@app-shell-app/index": "./apps/app-shell-dashboard.js",
     "@app-shell-app/oauth": "./apps/app-shell-oauth.js",
     "@app-shell-app/test": "https://p-huisman.github.io/app-shell-1-test-app/index.js",
-    "@app-shell-app/catalog": "https://zealous-beach-09e485d03.5.azurestaticapps.net/lifecycles.js"
+    "@app-shell-app/catalog": "https://p-huisman.github.io/app-shell-blazor-sample-app/lifecycles.js"
   },
   "theme" : {
     "colors": {
