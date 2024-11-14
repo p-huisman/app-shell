@@ -24,6 +24,9 @@ window.addEventListener("startAppShellTask", () => {
 
 window.addEventListener("finishAppShellTask", () => {
   runningTasks--;
+  if(runningTasks < 0) {
+    runningTasks = 0;
+  }
   window.dispatchEvent(
     new CustomEvent("appShellStateChange", {detail: appShellStateInstance}),
   );

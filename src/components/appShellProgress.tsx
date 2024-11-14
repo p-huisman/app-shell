@@ -19,7 +19,7 @@ document.adoptedStyleSheets = [...document.adoptedStyleSheets, cs];
 
 const useStyles = makeStyles({
   progressbar: {
-    height: "1px",
+    height: "2px",
     width: "100%",
     overflow: "hidden",
     visibility: "hidden",
@@ -27,7 +27,7 @@ const useStyles = makeStyles({
     position: "absolute",
   },
   progresbarVisible: {
-    height: "1px",
+    height: "2px",
     backgroundColor: "var(--colorBrandBackground2)",
     width: "100%",
     overflow: "hidden",
@@ -35,7 +35,7 @@ const useStyles = makeStyles({
   },
   progressbarValue: {
     width: "100%",
-    height: "1px",
+    height: "2px",
     backgroundColor: "var(--colorBrandBackground)",
     backgroundImage:
       "linear-gradient(to right, var(--colorNeutralBackground6) 0%, var(--colorBrandBackground) 50%, var(--colorNeutralBackground6) 100%)",
