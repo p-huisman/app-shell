@@ -125,7 +125,6 @@ const appShellBuildOptions = {
   entryPoints: [
     "./src/blazor-wasm-single-spa.ts",
     "./src/app-shell.tsx",
-    "./src/apps/app-shell-oauth.tsx",
     "./src/apps/app-shell-dashboard.tsx",
   ],
   outdir: "dist",

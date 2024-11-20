@@ -9,7 +9,6 @@ import {
   MenuPopover,
 } from "@fluentui/react-components";
 
-import {getUserInfo} from "../helpers/oauth";
 import Logo from "./logo";
 
 const useStyles = makeStyles({
@@ -30,46 +29,13 @@ const useStyles = makeStyles({
     flex: 1,
     display: "flex",
     justifyContent: "flex-end",
-  },
-  avatarButton: {
-    appearance: "none",
-    border: "none",
-    backgroundColor: "transparent",
-    margin: 0,
-    padding: 0,
-    cursor: "pointer",
-    minWidth: "unset",
-    "&:hover": {
-      "--colorBrandBackgroundStatic": "var(--colorCompoundBrandBackgroundHover)",
-    },
-    "&:hover:active": {
-      border: "none",
-      backgroundColor: "transparent",
-    }
   }
 });
 
-const userInfoFromSession = () => { 
-  const userInfo = sessionStorage.getItem("app.shell.user") ? JSON.parse(sessionStorage.getItem("app.shell.user")) : null;
-  return userInfo;
-}
+
 
 export const AppShellHeader = () => {
   const styles = useStyles();
-  const [userName, setUserName] = useState(userInfoFromSession()?.name );
-  useEffect(() => {  
-    window.addEventListener("storage", (e: StorageEvent) => {
-      if(e.key === "app.shell.user") {
-        userInfo();
-      }
-    });
-    userInfo();
-  }, []);
-
-  async function userInfo() {
-    const userInfo  = userInfoFromSession();
-    setUserName(userInfo && userInfo?.name ? userInfo.name : "");
-  }
 
   return (
     <header id="Header" className={styles.header}>
@@ -77,61 +43,6 @@ export const AppShellHeader = () => {
         <Logo />
       </div>
       <div className={styles.headerCol2}>
-      <Menu>
-        <MenuTrigger disableButtonEnhancement>
-          <Button className={styles.avatarButton}>
-          <Avatar
-            data-href="oauth"
-
-            aria-label={userName}
-            name={userName}
-            color="brand"
-          ></Avatar>
-          </Button>
-        </MenuTrigger>
-        <MenuPopover>
-          <MenuList>
-            {userName !== "" ? (
-              <MenuGroup>
-              <MenuGroupHeader><strong>{userName}</strong></MenuGroupHeader>
-              </MenuGroup>
-            ) : null }
-            {userName === "" ? (
-              <MenuItem
-                data-href="oauth"
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  const menuItem = target.closest(
-                    `[role="menuitem"]`,
-                  ) as HTMLElement;
-                  const link =
-                    new URL(document.querySelector("base").href).pathname +
-                    menuItem.dataset.href;
-                  history.pushState({}, "", link);
-                }}
-              >
-                Login
-              </MenuItem>
-            ) : (
-              <MenuItem
-                data-href="oauth/logout"
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  const menuItem = target.closest(
-                    `[role="menuitem"]`,
-                  ) as HTMLElement;
-                  const link =
-                    new URL(document.querySelector("base").href).pathname +
-                    menuItem.dataset.href;
-                  history.pushState({}, "", link);
-                }}
-              >
-                Logout
-              </MenuItem>
-            )}
-          </MenuList>
-        </MenuPopover>
-      </Menu>
       </div>
     </header>
   );

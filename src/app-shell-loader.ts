@@ -5,6 +5,7 @@ import {
   constructLayoutEngine,
 } from "single-spa-layout";
 import {AppShellState} from "./helpers/app-shell-state";
+import { AuthProvider } from "./helpers/auth-provider";
 
 let deferredPrompt: any;
 
@@ -109,6 +110,12 @@ function initSingleSpa(state: AppShellState) {
 }
 
 async function main() {
+
+  // handle msal redirect
+  if (document.location.hash.indexOf("code=") > -1) {
+    await AuthProvider.handlCallback();
+  }
+
   const registerServiceWorker = async () => {
     if ("serviceWorker" in navigator) {
       try {
@@ -125,7 +132,6 @@ async function main() {
   registerServiceWorker();
 
 
-  // Check if we are redirected from the 404 page
   if (sessionStorage.getItem("redirect")) {
     const location = sessionStorage.getItem("redirect");
     sessionStorage.removeItem("redirect");

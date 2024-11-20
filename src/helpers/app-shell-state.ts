@@ -1,5 +1,6 @@
 import type {Theme} from "@fluentui/react-components";
 import {IAppShellDialogProps} from "../components/appShellDialog";
+import { AuthProvider } from "./auth-provider";
 
 type AppShellMessageIntent = "info" | "warning" | "error" | "success";
 
@@ -31,6 +32,8 @@ window.addEventListener("finishAppShellTask", () => {
     new CustomEvent("appShellStateChange", {detail: appShellStateInstance}),
   );
 });
+
+const authProviders = new Map<string, AuthProvider>();
 
 export class AppShellState {
   constructor(private configUrl: string) {
@@ -81,6 +84,14 @@ export class AppShellState {
 
   get currentTheme(): Theme {
     return this.theme === "dark" ? this.darkTheme : this.lightTheme;
+  }
+
+  getAuthProvider(clientId: string, tenantId: string): AuthProvider {
+    if (authProviders.has(clientId)) {
+      return authProviders.get(clientId);
+    }
+    authProviders.set(clientId, new AuthProvider(clientId, tenantId));
+    return authProviders.get(clientId);
   }
 
   openDialog: (props: IAppShellDialogProps) => Promise<string>;
