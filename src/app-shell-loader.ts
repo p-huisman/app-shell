@@ -106,10 +106,20 @@ function initSingleSpa(state: AppShellState) {
   });
   applications.forEach(registerApplication);
   layoutEngine.activate();
+
+  window.addEventListener("single-spa:app-change", (evt: CustomEventInit) => {
+    const {MOUNTED}  = evt.detail.appsByNewStatus;
+    const mountedApp = MOUNTED.filter((app: string) => app.startsWith("@app-shell-app/"))[0];
+    document.title = state.apps.find((a: any) => a.name === mountedApp)?.title || "";
+  });
+
+
+
   start();
 }
 
 async function main() {
+
 
   // handle msal redirect
   if (document.location.hash.indexOf("code=") > -1) {

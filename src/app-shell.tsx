@@ -38,9 +38,9 @@ const useStyles = makeStyles({
   },
   progressbar: {
     gridArea: "header",
-    zIndex: 1,
+    zIndex: 100,
     position: "absolute",
-    top: 0,
+    top: "70px",
     left: 0,
     width: "100%",
   },
@@ -113,7 +113,7 @@ const App = () => {
       <div id="Main" className={styles.main}>
         <AppShellHeader />
         <div className={styles.progressbar}>
-        <AppShellProgress  active={inProgress} />
+          <AppShellProgress  active={inProgress} />
         </div>
         <div className={styles.content}>
           <div id="Notifications" className={styles.notifications}>
